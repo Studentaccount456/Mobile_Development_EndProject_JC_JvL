@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Mobile_Dev_EndProject_JC_JvL" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Mobile_Dev_EndProject_JC_JvL" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Custom theme attributes here -->
+    </style>
 </resources>
