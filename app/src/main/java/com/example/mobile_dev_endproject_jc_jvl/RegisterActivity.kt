@@ -94,7 +94,7 @@ class RegisterActivity : AppCompatActivity() {
                                 // Document creation successful
                                 // Now, create the subcollection "TheProfileDetails" and its document
                                 val profileDetails = hashMapOf(
-                                    "Avatar" to "Not Yet Stated",
+                                    "Avatar" to "https://firebasestorage.googleapis.com/v0/b/mobile-development4.appspot.com/o/default_image.jpg?alt=media",
                                     "Followers" to 0,
                                     "Following" to 0,
                                     "Level" to 1,
