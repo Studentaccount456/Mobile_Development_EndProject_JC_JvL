@@ -25,6 +25,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 // New
 import com.example.mobile_dev_endproject_jc_jvl.ui.theme.Mobile_Dev_EndProject_JC_JvLTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +59,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(navController: NavHostController) {
+    // State to hold the value fetched from Firestore
+    var firestoreData by remember { mutableStateOf("Loading...") }
+
+    // Fetch data from Firestore when the composable is first recomposed
+    LaunchedEffect(key1 = Unit) {
+        fetchDataFromFirestore { data ->
+            firestoreData = data ?: "Failed to fetch data"
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,19 +75,93 @@ fun MainScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Greeting("Android")
+        // Display Firestore data above the button
+        Text(
+            text = "Firestore Data: $firestoreData",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
         // Button to navigate to the login screen
         Button(onClick = { navController.navigate("login") }) {
             Text("Go to Login Screen")
         }
+
+        // Adding the LoginScreen composable here
+        LoginScreen()
     }
+}
+
+// Function to fetch data from Firestore
+private fun fetchDataFromFirestore(onSuccess: (String?) -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    val docRef = db.collection("TestingPurposes").document("LeTest")
+
+    docRef.get()
+        .addOnSuccessListener { document ->
+            if (document != null && document.exists()) {
+                val testingName = document.getString("TestingName")
+                onSuccess(testingName)
+            } else {
+                onSuccess(null)
+            }
+        }
+        .addOnFailureListener { e ->
+            onSuccess(null)
+        }
 }
 
 @Composable
 fun LoginScreen() {
-    // Your login screen composable content goes here
-    Text(text = "Login Screen")
+    // State to track whether the Firestore data creation is in progress
+    var creationInProgress by remember { mutableStateOf(false) }
+
+    // Function to create data in Firestore
+    fun createDataInFirestore() {
+        if (!creationInProgress) {
+            creationInProgress = true
+            createFirestoreData {
+                // Handle success or failure if needed
+                creationInProgress = false
+            }
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Button to create data in Firestore
+        Button(onClick = { createDataInFirestore() }) {
+            Text("Create Data in Firestore")
+        }
+    }
+}
+
+// Function to create data in Firestore
+private fun createFirestoreData(onCompletion: () -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    val collectionRef = db.collection("ElTestoPurposes")
+    val documentRef = collectionRef.document("LeCoolTest")
+
+    // Data to be added to Firestore
+    val data = hashMapOf(
+        "ThisIsATest" to "ElLocoMoco"
+    )
+
+    // Create the collection and document
+    collectionRef.add(data)
+        .addOnSuccessListener { documentReference ->
+            // Handle success
+            onCompletion()
+        }
+        .addOnFailureListener { e ->
+            // Handle failure
+            onCompletion()
+        }
 }
 
 @Composable
