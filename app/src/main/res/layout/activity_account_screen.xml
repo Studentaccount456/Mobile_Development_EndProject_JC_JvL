@@ -92,7 +92,7 @@
             android:id="@+id/preferencesTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Player Preferences"
+            android:text="Player Preferences:"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
@@ -125,7 +125,7 @@
             android:id="@+id/courtPositionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Player Preferences"
+            android:text="Player Preferences:"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
