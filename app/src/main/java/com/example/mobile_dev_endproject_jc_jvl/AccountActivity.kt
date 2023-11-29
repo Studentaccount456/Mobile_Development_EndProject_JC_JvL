@@ -1,5 +1,6 @@
 package com.example.mobile_dev_endproject_jc_jvl
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.log
@@ -33,6 +35,27 @@ class AccountActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_screen)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // Right Icon active
+        bottomNavigationView.menu.findItem(R.id.navigation_account).isChecked = true
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    launchActivity(HomeActivity::class.java)
+                    true
+                }
+                R.id.navigation_account -> {
+                    launchActivity(AccountActivity::class.java)
+
+                    true
+                }
+                else -> false
+            }
+        }
+
 
         // Initialize your views
         profileImage = findViewById(R.id.profileImage)
@@ -144,4 +167,9 @@ class AccountActivity : AppCompatActivity(){
 
         // Set up the rest of your UI and handle button clicks as needed
             }
+
+    private fun launchActivity(cls: Class<*>) {
+        val intent = Intent(this, cls)
+        startActivity(intent)
+    }
         }

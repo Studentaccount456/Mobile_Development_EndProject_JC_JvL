@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Login successful
                     // You can navigate to the main activity or perform other actions
-                    startActivity(Intent(this, AccountActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
                 } else {
                     // If login fails, display a message to the user.
                     // You can customize the error message based on the task.exception

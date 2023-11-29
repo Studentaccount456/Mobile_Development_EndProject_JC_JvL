@@ -61,6 +61,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:22.0.0")
     implementation ("com.google.firebase:firebase-firestore-ktx:24.2.0")
+    //implementation ("com.google.firebase:firebase-database:23.0.0")
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
@@ -76,7 +77,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha08")
     implementation ("androidx.navigation:navigation-compose:2.3.5")
     implementation("com.google.android.material:material:1.8.0")
-    implementation ("com.github.bumptech.glide:glide:4.12.0")  // Use the latest version available
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.3.5")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.3.5")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

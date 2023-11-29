@@ -1,6 +1,5 @@
 package com.example.mobile_dev_endproject_jc_jvl
 
-// Add this import statement at the beginning of your file
 import android.content.Intent
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
