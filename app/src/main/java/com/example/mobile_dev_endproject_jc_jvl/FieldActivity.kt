@@ -5,16 +5,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class HomeActivity : AppCompatActivity() {
+class FieldActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home_screen)
+        setContentView(R.layout.field_screen)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         // Right Icon active
-        bottomNavigationView.menu.findItem(R.id.navigation_home).isChecked = true
+        bottomNavigationView.menu.findItem(R.id.navigation_field).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {

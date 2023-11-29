@@ -1,20 +1,19 @@
 package com.example.mobile_dev_endproject_jc_jvl
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class HomeActivity : AppCompatActivity() {
+class MatchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home_screen)
+        setContentView(R.layout.match_screen)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         // Right Icon active
-        bottomNavigationView.menu.findItem(R.id.navigation_home).isChecked = true
+        bottomNavigationView.menu.findItem(R.id.navigation_match).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {

@@ -47,6 +47,14 @@ class AccountActivity : AppCompatActivity(){
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+                R.id.navigation_field -> {
+                    launchActivity(FieldActivity::class.java)
+                    true
+                }
+                R.id.navigation_match -> {
+                    launchActivity(MatchActivity::class.java)
+                    true
+                }
                 R.id.navigation_account -> {
                     launchActivity(AccountActivity::class.java)
 
