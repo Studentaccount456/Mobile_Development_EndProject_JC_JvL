@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="type_match_options">
+        <item>Friendly</item>
+        <item>Competitive</item>
+        <item>Either</item>
+    </array>
+    <array name="hand_play_options">
+        <item>Left</item>
+        <item>Right</item>
+        <item>Either</item>
+    </array>
+
+    <array name="time_to_play_options">
+        <item>Morning</item>
+        <item>Afternoon</item>
+        <item>Evening</item>
+        <item>Either</item>
+    </array>
+
+    <array name="court_position_options">
+        <item>Left</item>
+        <item>Right</item>
+        <item>Either</item>
+    </array>
+
+    <array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Either</item>
+    </array>
+</resources>

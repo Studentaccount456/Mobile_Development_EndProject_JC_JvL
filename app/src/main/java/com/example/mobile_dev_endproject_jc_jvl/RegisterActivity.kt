@@ -108,12 +108,12 @@ class RegisterActivity : AppCompatActivity() {
                                         // Document creation successful
                                         // Now, create the subcollection "ThePreferencesPlayer" and its document
                                         val preferencesPlayer = hashMapOf(
-                                            "PrefferedPlayLocation" to "Not Yet Stated",
-                                            "PrefferedTypeMatch" to "Not Yet Stated",
-                                            "PrefferedHandPlay" to "Not Yet Stated",
-                                            "PrefferedTimeToPlay" to "Not Yet Stated",
-                                            "PrefferedCourtPosition" to "Not Yet Stated",
-                                            "PrefferedGenderToPlayAgainst" to "Not Yet Stated"
+                                            "preferredPlayLocation" to "Location Not Yet Stated",
+                                            "preferredTypeMatch" to "Not Yet Stated",
+                                            "preferredHandPlay" to "Not Yet Stated",
+                                            "preferredTimeToPlay" to "Not Yet Stated",
+                                            "preferredCourtPosition" to "Not Yet Stated",
+                                            "preferredGenderToPlayAgainst" to "Not Yet Stated"
                                         )
                                         db.collection("ThePlayers")
                                             .document(userId)

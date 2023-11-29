@@ -1,0 +1,76 @@
+<!-- activity_edit_profile.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Preferred Play Location -->
+    <EditText
+        android:id="@+id/playLocationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Preferred Play Location"/>
+
+    <!-- Preferred Type Match Spinner -->
+    <Spinner
+        android:id="@+id/typeMatchSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/type_match_options" />
+
+    <!-- Preferred Hand to Play With Spinner -->
+    <Spinner
+        android:id="@+id/handPlaySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/hand_play_options" />
+
+    <!-- Preferred Time to Play Spinner -->
+    <Spinner
+        android:id="@+id/timeToPlaySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/time_to_play_options" />
+
+    <!-- Preferred Court Position Spinner -->
+    <Spinner
+        android:id="@+id/courtPositionSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/court_position_options" />
+
+    <!-- Preferred Gender to Play Against Spinner -->
+    <Spinner
+        android:id="@+id/genderSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/gender_options" />
+
+    <!-- Save and Return Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/returnButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Return" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+    </LinearLayout>
+</LinearLayout>

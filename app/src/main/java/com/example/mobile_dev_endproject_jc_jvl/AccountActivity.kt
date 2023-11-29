@@ -28,6 +28,7 @@ class AccountActivity : AppCompatActivity(){
     private lateinit var timeToPlayText: TextView
     private lateinit var courtPositionText: TextView
     private lateinit var genderToPlayAgainstText: TextView
+    private lateinit var logoutButton: Button
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -79,6 +80,7 @@ class AccountActivity : AppCompatActivity(){
         timeToPlayText = findViewById(R.id.timeToPlayText)
         courtPositionText = findViewById(R.id.courtPositionText)
         genderToPlayAgainstText = findViewById(R.id.genderToPlayAgainstText)
+        logoutButton = findViewById(R.id.logoutButton)
 
         // Fetch data from Firestore
         val userId = auth.currentUser?.uid
@@ -131,31 +133,34 @@ class AccountActivity : AppCompatActivity(){
                                             Log.d("AccountActivity", "3) Preferences data: $preferencesData")
 
                                             // Extract fields from the "ThePreferencesPlayer" document
-                                            val typeMatch = preferencesData?.get("PrefferedTypeMatch") as? String
-                                            val handPlay = preferencesData?.get("PrefferedHandPlay") as? String
-                                            val timeToPlay = preferencesData?.get("PrefferedTimeToPlay") as? String
-                                            val courtPosition = preferencesData?.get("PrefferedCourtPosition") as? String
+                                            val typeMatch = preferencesData?.get("preferredTypeMatch") as? String
+                                            val handPlay = preferencesData?.get("preferredHandPlay") as? String
+                                            val timeToPlay = preferencesData?.get("preferredTimeToPlay") as? String
+                                            val courtPosition = preferencesData?.get("preferredCourtPosition") as? String
                                             val genderToPlayAgainst =
-                                                preferencesData?.get("PrefferedGenderToPlayAgainst") as? String
-                                            val playLocation = preferencesData?.get("PrefferedPlayLocation") as? String
+                                                preferencesData?.get("preferredGenderToPlayAgainst") as? String
+                                            val playLocation = preferencesData?.get("preferredPlayLocation") as? String
 
+
+                                            Log.d("AccountActivity", "3.2) Null? data: $typeMatch,$handPlay,$timeToPlay,$courtPosition,$genderToPlayAgainst,$playLocation")
                                             // Check if any of the required preference fields is null before updating UI
                                             if (typeMatch != null && handPlay != null && timeToPlay != null
                                                 && courtPosition != null && genderToPlayAgainst != null && playLocation != null
                                             ) {
                                                 // Update UI with fetched preferences
+                                                Log.d("AccountActivity", "4) Activated!")
                                                 locationText.text = playLocation
                                                 typeMatchText.text = "Type Match: " + typeMatch
+                                                Log.d("AccountActivity", "5) Textinput: ${typeMatchText.text}")
                                                 handPlayText.text = "Preferred Hand: " + handPlay
-                                                timeToPlayText.text = "Preffered Time: " + timeToPlay
-                                                courtPositionText.text = "Preffered Court Position: " + courtPosition
-                                                genderToPlayAgainstText.text = "Preffered Gender to play against: " + genderToPlayAgainst
+                                                timeToPlayText.text = "Preferred Time: " + timeToPlay
+                                                courtPositionText.text = "Preferred Court Position: " + courtPosition
+                                                genderToPlayAgainstText.text = "Preferred Gender to play against: " + genderToPlayAgainst
                                             } else {
                                                 // Handle the case where some preference fields are null
                                                 // Show an error message or take appropriate action
-                                            }
-                                        }
-                                    }
+                                            }}}
+
                                 } else {
                                     // Handle the case where some fields in "Nickname" document are null
                                     // Show an error message or take appropriate action
@@ -174,7 +179,24 @@ class AccountActivity : AppCompatActivity(){
 
 
         // Set up the rest of your UI and handle button clicks as needed
-            }
+        editProfileButton = findViewById(R.id.editProfileButton);
+
+        editProfileButton.setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+
+        logoutButton.setOnClickListener {
+            // Log out the user
+            auth.signOut()
+
+            // Redirect to the login activity
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+
+            // Finish the current activity
+            finish()
+        }
+    }
 
     private fun launchActivity(cls: Class<*>) {
         val intent = Intent(this, cls)

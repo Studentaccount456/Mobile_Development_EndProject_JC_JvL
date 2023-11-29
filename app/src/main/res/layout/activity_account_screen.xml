@@ -149,6 +149,15 @@
             android:layout_marginTop="16dp"/>
         <!-- Add your TextViews for each preference here -->
 
+        <!-- Log Out Button -->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:layout_marginTop="16dp"
+            android:background="#FF0000"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
