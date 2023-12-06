@@ -63,7 +63,6 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore-ktx:24.2.0")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation ("com.google.firebase:firebase-database:20.3.0")
-    implementation ("com.google.android.gms:play-services-maps:17.0.1")
     implementation ("org.osmdroid:osmdroid-android:6.1.10")
     //implementation ("com.google.firebase:firebase-database:23.0.0")
 
