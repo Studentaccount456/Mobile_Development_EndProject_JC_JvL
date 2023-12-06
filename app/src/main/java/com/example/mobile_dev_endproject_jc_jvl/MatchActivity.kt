@@ -21,7 +21,7 @@ class MatchActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
-                R.id.navigation_field -> {
+                R.id.navigation_court -> {
                     launchActivity(ClubActivity::class.java)
                     true
                 }

@@ -23,7 +23,7 @@ class ClubActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         // Right Icon active
-        bottomNavigationView.menu.findItem(R.id.navigation_field).isChecked = true
+        bottomNavigationView.menu.findItem(R.id.navigation_court).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -32,7 +32,7 @@ class ClubActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.navigation_field -> {
+                R.id.navigation_court -> {
                     launchActivity(ClubActivity::class.java)
                     true
                 }
