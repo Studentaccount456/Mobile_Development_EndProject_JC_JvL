@@ -18,7 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ClubDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -27,6 +29,7 @@
             android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,6 +41,7 @@
             android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -49,6 +53,7 @@
             android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -58,10 +63,11 @@
             android:label="Padelero"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".HomeActivity"
@@ -71,17 +77,19 @@
             android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".FieldActivity"
+            android:name=".ClubActivity"
             android:exported="true"
             android:label="Padelero"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -104,6 +112,7 @@
             android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

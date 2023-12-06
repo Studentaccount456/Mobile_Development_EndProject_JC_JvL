@@ -8,9 +8,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.math.log
 
-class FieldActivity : AppCompatActivity() {
+class ClubActivity : AppCompatActivity() {
     private lateinit var linearLayout: LinearLayout
 
     private val db = FirebaseFirestore.getInstance()
@@ -19,12 +18,12 @@ class FieldActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.field_screen)
+        setContentView(R.layout.club_screen)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         // Right Icon active
-        bottomNavigationView.menu.findItem(R.id.navigation_field).isChecked = true
+        bottomNavigationView.menu.findItem(R.id.navigation_court).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -33,8 +32,8 @@ class FieldActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.navigation_field -> {
-                    launchActivity(FieldActivity::class.java)
+                R.id.navigation_court -> {
+                    launchActivity(ClubActivity::class.java)
                     true
                 }
 
@@ -67,6 +66,8 @@ class FieldActivity : AppCompatActivity() {
                             // Create a TextView for each ClubName
                             val textView = TextView(this)
                             textView.text = clubName
+
+
 
                             // Add the TextView to the LinearLayout
                             linearLayout.addView(textView)

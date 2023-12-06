@@ -13,9 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
-import kotlin.math.log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 
@@ -55,8 +53,8 @@ class AccountActivity : AppCompatActivity(){
                     launchActivity(HomeActivity::class.java)
                     true
                 }
-                R.id.navigation_field -> {
-                    launchActivity(FieldActivity::class.java)
+                R.id.navigation_court -> {
+                    launchActivity(ClubActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {

@@ -30,8 +30,8 @@ class HomeActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
-                R.id.navigation_field -> {
-                    launchActivity(FieldActivity::class.java)
+                R.id.navigation_court -> {
+                    launchActivity(ClubActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {
