@@ -56,7 +56,7 @@ class AccountActivity : AppCompatActivity(){
                     true
                 }
                 R.id.navigation_field -> {
-                    launchActivity(FieldActivity::class.java)
+                    launchActivity(ClubActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {
