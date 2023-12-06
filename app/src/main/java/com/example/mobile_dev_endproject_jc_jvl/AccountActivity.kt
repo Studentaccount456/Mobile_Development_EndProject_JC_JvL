@@ -1,7 +1,9 @@
 package com.example.mobile_dev_endproject_jc_jvl
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -11,7 +13,11 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.storage.FirebaseStorage;
 import kotlin.math.log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 
 class AccountActivity : AppCompatActivity(){
 
@@ -29,8 +35,9 @@ class AccountActivity : AppCompatActivity(){
     private lateinit var courtPositionText: TextView
     private lateinit var genderToPlayAgainstText: TextView
     private lateinit var logoutButton: Button
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
-    private val db = FirebaseFirestore.getInstance()
+        private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,6 +184,25 @@ class AccountActivity : AppCompatActivity(){
             }
         }
 
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                if (data != null && data.data != null) {
+                    val imageUri: Uri = data.data!!
+                    uploadImageToFirebaseStorage(imageUri)
+                }
+            }
+        }
+
+        // ... (existing code)
+
+        profileImage.setOnClickListener {
+            // Open the image picker or camera to choose a new avatar
+            // You can use an external library like Intent.ACTION_PICK or Intent.ACTION_GET_CONTENT
+            // or implement your own image picker logic
+            openImagePicker()
+        }
+
 
         // Set up the rest of your UI and handle button clicks as needed
         editProfileButton = findViewById(R.id.editProfileButton);
@@ -202,4 +228,58 @@ class AccountActivity : AppCompatActivity(){
         val intent = Intent(this, cls)
         startActivity(intent)
     }
+
+    private fun openImagePicker() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        pickImageLauncher.launch(galleryIntent)
+    }
+
+    private fun uploadImageToFirebaseStorage(imageUri: Uri) {
+        // Implement logic to upload the image to Firebase Storage
+        // You can use the Firebase Storage API to upload the image
+        // Example:
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imageRef = storageRef.child("avatars/${auth.currentUser?.uid}.jpg")
+
+        // Upload file to Firebase Storage
+        imageRef.putFile(imageUri)
+            .addOnSuccessListener { taskSnapshot ->
+                // Image uploaded successfully
+                // Get the download URL and update the user's profile
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    // Update the user's avatar URL in Firestore
+                    updateAvatarUrl(uri.toString())
+                }
+            }
+            .addOnFailureListener { e ->
+                // Handle the error
+                Log.e("AccountActivity", "Image upload failed: ${e.message}")
+            }
+    }
+
+    private fun updateAvatarUrl(avatarUrl: String) {
+        // Update the "Avatar" field in Firestore
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            val userRef = db.collection("ThePlayers").document(userId)
+            val profileDetailsRef = userRef.collection("TheProfileDetails").document("Nickname")
+
+            // Update the "Avatar" field with the new URL
+            profileDetailsRef.update("Avatar", avatarUrl)
+                .addOnSuccessListener {
+                    // Avatar URL updated successfully
+                    // Update the UI with the new avatar
+                    Glide.with(this).load(avatarUrl).into(profileImage)
+                }
+                .addOnFailureListener { e ->
+                    // Handle the error
+                    Log.e("AccountActivity", "Failed to update avatar URL: ${e.message}")
+                }
         }
+    }
+
+
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1
+    }
+}

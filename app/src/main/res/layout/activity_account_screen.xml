@@ -36,8 +36,11 @@
                 android:id="@+id/profileImage"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_foreground"/>
+                android:clickable="true"
+                android:onClick="onProfileImageClick"
+                app:srcCompat="@drawable/ic_launcher_foreground"/>
+                <!-- android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_foreground"/> -->
 
             <LinearLayout
                 android:layout_width="0dp"

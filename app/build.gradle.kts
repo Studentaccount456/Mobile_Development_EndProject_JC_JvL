@@ -61,6 +61,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:22.0.0")
     implementation ("com.google.firebase:firebase-firestore-ktx:24.2.0")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     //implementation ("com.google.firebase:firebase-database:23.0.0")
 
     // Add the dependencies for any other desired Firebase products
