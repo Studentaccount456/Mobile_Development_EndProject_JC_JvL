@@ -28,3 +28,7 @@ app/google-services.json
 
 # Android Profiling
 *.hprof
+
+# API-Key
+
+api-keys.properties

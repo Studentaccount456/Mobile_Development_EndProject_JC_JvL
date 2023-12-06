@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
 
         // Add custom navigation items
         addNavigationItem(container, "Book A court", "Navigates to book a court", AccountActivity::class.java)
-        addNavigationItem(container, "Open Option", "Second option", AccountActivity::class.java)
+        addNavigationItem(container, "Show Club Map", "Shows all available clubs on a Map", MapActivity::class.java)
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
