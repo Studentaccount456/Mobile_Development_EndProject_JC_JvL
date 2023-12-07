@@ -137,25 +137,39 @@ class MapActivity : AppCompatActivity() {
         return GeoPoint(latitude, longitude)
     }
 
+
     private fun fetchClubsFromFirebase() {
         firestore.collection("TheClubDetails")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val clubName = document.getString("ClubName")
-                    val clubLocation = document.getGeoPoint("ClubLocation")
-                    if (clubLocation != null) {
-                    }
+                    val clubName = document.id
 
-                    if (clubName != null && clubLocation != null) {
-                        val clubMarker = OverlayItem(clubName, "Club Location", createGeoPoint(clubLocation.latitude, clubLocation.longitude))
-                        val clubMarkerOverlay = ItemizedIconOverlay<OverlayItem>(
-                            applicationContext,
-                            listOf(clubMarker),
-                            null
-                        )
-                        mapView.overlays.add(clubMarkerOverlay)
-                    }
+                    firestore.collection("TheClubDetails").document(clubName).collection("TheClubEstablishments")
+                        .get()
+                        .addOnSuccessListener { establishmentResult ->
+                            for (establishmentDocument in establishmentResult) {
+                                val clubEstablishmentName = establishmentDocument.getString("ClubEstablishmentName")
+                                val clubEstablishmentLocation = establishmentDocument.getGeoPoint("ClubEstablishmentLocation")
+
+                                if (clubEstablishmentName != null && clubEstablishmentLocation != null) {
+                                    val clubMarker = OverlayItem(
+                                        clubEstablishmentName,
+                                        "Club Location",
+                                        createGeoPoint(clubEstablishmentLocation.latitude, clubEstablishmentLocation.longitude)
+                                    )
+                                    val clubMarkerOverlay = ItemizedIconOverlay<OverlayItem>(
+                                        applicationContext,
+                                        listOf(clubMarker),
+                                        null
+                                    )
+                                    mapView.overlays.add(clubMarkerOverlay)
+                                }
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("MapActivity", "Error fetching establishments from Firebase: $exception")
+                        }
                 }
             }
             .addOnFailureListener { exception ->
