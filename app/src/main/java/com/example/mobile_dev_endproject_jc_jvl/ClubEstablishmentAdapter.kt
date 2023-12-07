@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobile_dev_endproject_jc_jvl.DataClasses.ClubEstablishment
 
 class ClubEstablishmentAdapter(
     private val establishments: List<ClubEstablishment>,

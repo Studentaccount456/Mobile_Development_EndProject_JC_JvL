@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobile_dev_endproject_jc_jvl.DataClasses.ClubEstablishment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
@@ -142,6 +143,7 @@ class ClubEstablishmentsActivity : AppCompatActivity() {
         val intent = Intent(this, EstablishmentDetailsActivity::class.java).apply {
             putExtra("ClubName", clubEstablishment.clubName)
             putExtra("ClubEstablishmentAddress", clubEstablishment.clubEstablishmentAddress)
+            putExtra("EstablishmentName", clubEstablishment.clubEstablishmentName)
         }
         startActivity(intent)
     }
