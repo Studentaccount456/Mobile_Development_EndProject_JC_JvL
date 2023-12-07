@@ -53,7 +53,7 @@ class AccountActivity : AppCompatActivity(){
                     true
                 }
                 R.id.navigation_court -> {
-                    launchActivity(ClubActivity::class.java)
+                    launchActivity(ClubEstablishmentsActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {

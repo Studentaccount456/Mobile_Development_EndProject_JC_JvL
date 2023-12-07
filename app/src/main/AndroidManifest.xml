@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL"
         tools:targetApi="31">
         <activity
-            android:name=".ClubDetailsActivity"
+            android:name=".EstablishmentDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -77,7 +77,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ClubActivity"
+            android:name=".ClubEstablishmentsActivity"
             android:exported="true"
             android:label="Padelero"
             android:screenOrientation="portrait"
