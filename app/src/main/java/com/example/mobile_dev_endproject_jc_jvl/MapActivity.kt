@@ -2,7 +2,9 @@ package com.example.mobile_dev_endproject_jc_jvl
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,6 +25,19 @@ class MapActivity : AppCompatActivity() {
 
     private lateinit var mapView: MapView
     private val firestore = FirebaseFirestore.getInstance()
+    private val ZOOM_REPEAT_INTERVAL = 50L
+    private var isZoomingOut = false
+    private var zoomOutHandler: Handler? = null
+
+    private val zoomOutRunnable: Runnable = object : Runnable {
+        override fun run() {
+            if (isZoomingOut) {
+                mapView.controller.zoomOut()
+                zoomOutHandler?.postDelayed(this, ZOOM_REPEAT_INTERVAL)
+            }
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,21 +51,7 @@ class MapActivity : AppCompatActivity() {
 
         bottomNavigationView.labelVisibilityMode = BottomNavigationView.LABEL_VISIBILITY_LABELED
 
-
-        for (i in 0 until bottomNavigationView.menu.size()) {
-            val menuItem = bottomNavigationView.menu.getItem(i)
-            val itemId = menuItem.itemId
-            val iconResource = menuItem.icon
-
-            Log.d("MapActivity", "Menu Item $itemId - Icon Resource: $iconResource")
-        }
-
-        Log.d("MapActivity", "BottomNavigationView is null: ${bottomNavigationView == null}")
-
-
         bottomNavigationView.menu.findItem(R.id.navigation_home).isChecked = true
-
-        Log.d("MapActivity", "Menu item found: ${bottomNavigationView.menu.findItem(R.id.navigation_home) != null}")
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -93,7 +94,7 @@ class MapActivity : AppCompatActivity() {
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
-                val threshold = 100
+                val threshold = 225
                 val itemList = getOverlayItemsList()
 
                 Log.d("MapActivity", "Tapped Point Coordinates: ${p.latitude}, ${p.longitude}")
@@ -118,11 +119,30 @@ class MapActivity : AppCompatActivity() {
 
 
             override fun longPressHelper(p: GeoPoint): Boolean {
-                return false
+                if (!isZoomingOut) {
+                    isZoomingOut = true
+                    zoomOutHandler = Handler()
+                    zoomOutHandler?.postDelayed(zoomOutRunnable, ZOOM_REPEAT_INTERVAL)
+                }
+                return true
             }
         })
 
         mapView.overlays.add(mapEventsOverlay)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
+            // Long press ended
+            stopZoomingOut()
+        }
+        return super.onTouchEvent(event)
+    }
+
+    private fun stopZoomingOut() {
+        isZoomingOut = false
+        zoomOutHandler?.removeCallbacksAndMessages(null)
+        zoomOutHandler = null
     }
 
     private fun createGeoPoint(latitude: Double, longitude: Double): IGeoPoint {
