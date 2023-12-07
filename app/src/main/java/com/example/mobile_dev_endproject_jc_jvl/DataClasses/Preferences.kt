@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl
+package com.example.mobile_dev_endproject_jc_jvl.DataClasses
 
 data class Preferences(
     val preferredPlayLocation: String = "",
