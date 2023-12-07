@@ -42,7 +42,6 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // Initialize Firestore
         val db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
 
@@ -60,13 +59,11 @@ class RegisterActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty()) {
                 registerUser(email, password)
             } else {
-                // Handle empty fields
                 showSnackbar("Please fill in all fields.")
             }
         }
 
         returnButton.setOnClickListener {
-            // Return to LoginActivity
             startActivity(Intent(this, LoginActivity::class.java))
         }
     }
@@ -75,11 +72,10 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Registration successful
                     val user = auth.currentUser
                     user?.let {
                         val userId = user.uid
-                        // Add the user to "ThePlayers" collection
+                        // Add user to "ThePlayers" collection
                         val player = hashMapOf(
                             "userId" to userId,
                             "email" to email,
@@ -87,11 +83,10 @@ class RegisterActivity : AppCompatActivity() {
                         )
                         val db = Firebase.firestore
                         db.collection("ThePlayers")
-                            .document(userId) // Use the userId as the documentId
+                            .document(userId) // Use userId as documentId
                             .set(player)
                             .addOnSuccessListener {
-                                // Document creation successful
-                                // Now, create the subcollection "TheProfileDetails" and its document
+                                // After success create sub-collection "TheProfileDetails" and its document
                                 val profileDetails = hashMapOf(
                                     "Avatar" to "https://firebasestorage.googleapis.com/v0/b/mobile-development4.appspot.com/o/default_image.jpg?alt=media",
                                     "Followers" to 0,
@@ -105,8 +100,7 @@ class RegisterActivity : AppCompatActivity() {
                                     .document("Nickname")
                                     .set(profileDetails)
                                     .addOnSuccessListener {
-                                        // Document creation successful
-                                        // Now, create the subcollection "ThePreferencesPlayer" and its document
+                                        // After success create sub-collection "ThePreferencesPlayer" and its document
                                         val preferencesPlayer = hashMapOf(
                                             "preferredPlayLocation" to "Location Not Yet Stated",
                                             "preferredTypeMatch" to "Not Yet Stated",
@@ -123,7 +117,6 @@ class RegisterActivity : AppCompatActivity() {
                                             .addOnSuccessListener {
                                                 // Document creation successful
                                                 showSnackbar("Registration successful!")
-                                                // Now, return to LoginActivity
                                                 startActivity(Intent(this, LoginActivity::class.java))
                                                 finish()
                                             }
@@ -152,14 +145,6 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
     }
-
-
-
-
-
-
-
-
 
     private fun showSnackbar(message: String) {
         // Assuming your root view is a CoordinatorLayout, replace it with the appropriate view type if needed

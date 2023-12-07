@@ -46,8 +46,6 @@ class MainActivity : ComponentActivity() {
                         MainScreen(navController)
                     }
                     composable("login") {
-                        // No need to define LoginScreen here
-                        // You can directly navigate to LoginActivity
                         val intent = Intent(this@MainActivity, LoginActivity::class.java)
                         startActivity(intent)
                     }
@@ -81,13 +79,10 @@ fun MainScreen(navController: NavHostController) {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-
-        // Button to navigate to the login screen
         Button(onClick = { navController.navigate("login") }) {
             Text("Go to Login Screen")
         }
-
-        // Adding the LoginScreen composable here
+        // Login screen composable
         LoginScreen()
     }
 }

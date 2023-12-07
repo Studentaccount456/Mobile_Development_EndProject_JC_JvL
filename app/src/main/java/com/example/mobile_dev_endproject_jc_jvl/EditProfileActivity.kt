@@ -46,12 +46,10 @@ class EditProfileActivity : AppCompatActivity() {
 
         // Set onClickListener for buttons
         returnButton.setOnClickListener {
-            // Handle return button click
             startActivity(Intent(this, AccountActivity::class.java))
         }
 
         saveButton.setOnClickListener {
-            // Handle save button click
             saveProfileDataToFirestore()
         }
     }
@@ -120,14 +118,9 @@ class EditProfileActivity : AppCompatActivity() {
                 startActivity(Intent(this, AccountActivity::class.java))
             }
             .addOnFailureListener {
-                // Handle failure
                 Toast.makeText(this, "Failed to save data", Toast.LENGTH_SHORT).show()
             }
     }
-
-
-
-
 
     private fun getIndex(spinner: Spinner, value: String): Int {
         for (i in 0 until spinner.count) {

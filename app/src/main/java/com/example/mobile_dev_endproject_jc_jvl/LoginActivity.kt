@@ -48,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         registerButton.setOnClickListener {
-            // To Registerscreen
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
@@ -58,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Login successful
-                    // You can navigate to the main activity or perform other actions
                     startActivity(Intent(this, HomeActivity::class.java))
                 } else {
                     // If login fails, display a message to the user.

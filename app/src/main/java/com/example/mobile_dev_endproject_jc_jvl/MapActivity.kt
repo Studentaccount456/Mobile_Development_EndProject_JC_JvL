@@ -38,7 +38,6 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,9 +47,7 @@ class MapActivity : AppCompatActivity() {
         setContentView(R.layout.map_screen)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
         bottomNavigationView.labelVisibilityMode = BottomNavigationView.LABEL_VISIBILITY_LABELED
-
         bottomNavigationView.menu.findItem(R.id.navigation_home).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -97,37 +94,28 @@ class MapActivity : AppCompatActivity() {
                 val threshold = 225
                 val itemList = getOverlayItemsList()
 
-                Log.d("MapActivity", "Tapped Point Coordinates: ${p.latitude}, ${p.longitude}")
-
                 for (marker in itemList) {
-                    Log.d("MapActivity", "Marker Coordinates: ${marker.point.latitude}, ${marker.point.longitude}")
                     val distance = p.distanceToAsDouble(marker.point)
-                    Log.d("MapActivity", "Distance to $marker: $distance")
                     if (distance < threshold) {
                         // If the tapped point is close to a marker, start HomeActivity
-                        Log.d("MapActivity", "Marker tapped! Starting HomeActivity.")
                         val intent = Intent(this@MapActivity, HomeActivity::class.java)
                         startActivity(intent)
                         return true
                     }
                 }
                 // When nothing is pressed
-                Log.d("MapActivity", "No marker tapped.")
                 return false
             }
-
-
 
             override fun longPressHelper(p: GeoPoint): Boolean {
                 if (!isZoomingOut) {
                     isZoomingOut = true
-                    zoomOutHandler = Handler()
+                    zoomOutHandler = Handler(mainLooper)
                     zoomOutHandler?.postDelayed(zoomOutRunnable, ZOOM_REPEAT_INTERVAL)
                 }
                 return true
             }
         })
-
         mapView.overlays.add(mapEventsOverlay)
     }
 
@@ -150,34 +138,23 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun fetchClubsFromFirebase() {
-        Log.d("MapActivity", "Here it staaaaaaaaaaaaarts")
         firestore.collection("TheClubDetails")
             .get()
             .addOnSuccessListener { result ->
-                Log.d("MapActivity", "Number of documents: ${result.size()}")
                 for (document in result) {
                     val clubName = document.getString("ClubName")
                     val clubLocation = document.getGeoPoint("ClubLocation")
                     if (clubLocation != null) {
-                        Log.d("MapActivity", "1) Club Location - Latitude: ${clubLocation.latitude}, Longitude: ${clubLocation.longitude}, ${clubName}")
                     }
 
                     if (clubName != null && clubLocation != null) {
-                        Log.d("MapActivity", "2) Club Location - Latitude: ${clubLocation.latitude}, Longitude: ${clubLocation.longitude}")
                         val clubMarker = OverlayItem(clubName, "Club Location", createGeoPoint(clubLocation.latitude, clubLocation.longitude))
                         val clubMarkerOverlay = ItemizedIconOverlay<OverlayItem>(
                             applicationContext,
                             listOf(clubMarker),
                             null
                         )
-
                         mapView.overlays.add(clubMarkerOverlay)
-
-                        Log.d("MapActivity", "Added marker overlay for $clubName")
-
-
-                        // Log statement for debugging
-                        Log.d("MapActivity", "Fetched Club: $clubName, Location: $clubLocation")
                     }
                 }
             }
@@ -198,12 +175,8 @@ class MapActivity : AppCompatActivity() {
                 }
             }
         }
-
         return itemList
     }
-
-
-
 
     // Forward lifecycle events to the MapView
     override fun onResume() {

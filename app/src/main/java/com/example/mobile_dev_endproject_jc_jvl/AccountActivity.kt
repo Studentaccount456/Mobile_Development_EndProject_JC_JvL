@@ -35,7 +35,7 @@ class AccountActivity : AppCompatActivity(){
     private lateinit var logoutButton: Button
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
-        private val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,6 @@ class AccountActivity : AppCompatActivity(){
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        // Right Icon active
         bottomNavigationView.menu.findItem(R.id.navigation_account).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -70,8 +69,7 @@ class AccountActivity : AppCompatActivity(){
             }
         }
 
-
-        // Initialize your views
+        // Initialize views
         profileImage = findViewById(R.id.profileImage)
         nicknameText = findViewById(R.id.nicknameText)
         locationText = findViewById(R.id.locationText)
@@ -93,31 +91,20 @@ class AccountActivity : AppCompatActivity(){
             val userRef = db.collection("ThePlayers").document(userId)
             userRef.get().addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    Log.d("AccountActivity", "1) Document data: ${document.data}")
-
-                    // Retrieve the "TheProfileDetails" subcollection
+                    // Retrieve the "TheProfileDetails" sub-collection
                     val profileDetailsRef = userRef.collection("TheProfileDetails")
                     profileDetailsRef.get().addOnSuccessListener { profileDetailsSnapshot ->
                         for (profileDetailsDocument in profileDetailsSnapshot.documents) {
-                            // Now you have access to each document in the "TheProfileDetails" subcollection
+                            // Now you have access to each document in the "TheProfileDetails" sub-collection
                             val profileDetailsData = profileDetailsDocument.data
-                            Log.d("AccountActivity", "2) Profile Details data: $profileDetailsData")
 
                             if (profileDetailsData != null) {
                                 // Extract fields
                                 val levelInformation = profileDetailsData["Level"]?.toString()?.toInt()
-                                Log.d("AccountActivity", "2.1) Profile Details data: $levelInformation")
                                 val followersInformation = profileDetailsData["Followers"]?.toString()?.toInt()
-                                Log.d("AccountActivity", "2.2) Profile Details data: $followersInformation")
                                 val followingInformation = profileDetailsData["Following"]?.toString()?.toInt()
-                                Log.d("AccountActivity", "2.3) Profile Details data: $followingInformation")
                                 val avatarUrl = profileDetailsData["Avatar"] as? String
                                 val nickname = profileDetailsData["Nickname"] as? String
-                                Log.d("AccountActivity", "2.0) Profile Details data: $nickname")
-                                Log.d(
-                                    "AccountActivity",
-                                    "Avatar URL: $avatarUrl, Nickname: $nickname, Level: $levelInformation, followers: $followersInformation, following: $followingInformation "
-                                )
 
                                 // Check if any of the required fields is null before updating UI
                                 if (avatarUrl != null && nickname != null && levelInformation != null && followersInformation != null && followingInformation != null) {
@@ -129,13 +116,12 @@ class AccountActivity : AppCompatActivity(){
                                     levelText.text = "Level: " + levelInformation.toString()
 
 
-                                    // Fetch "ThePreferencesPlayer" subcollection
+                                    // Fetch "ThePreferencesPlayer" sub-collection
                                     val preferencesRef = userRef.collection("ThePreferencesPlayer")
                                     preferencesRef.get().addOnSuccessListener { preferencesSnapshot ->
                                         for (preferencesDocument in preferencesSnapshot.documents) {
-                                            // Now you have access to each document in the "ThePreferencesPlayer" subcollection
+                                            // Now you have access to each document in the "ThePreferencesPlayer" sub-collection
                                             val preferencesData = preferencesDocument.data
-                                            Log.d("AccountActivity", "3) Preferences data: $preferencesData")
 
                                             // Extract fields from the "ThePreferencesPlayer" document
                                             val typeMatch = preferencesData?.get("preferredTypeMatch") as? String
@@ -146,17 +132,13 @@ class AccountActivity : AppCompatActivity(){
                                                 preferencesData?.get("preferredGenderToPlayAgainst") as? String
                                             val playLocation = preferencesData?.get("preferredPlayLocation") as? String
 
-
-                                            Log.d("AccountActivity", "3.2) Null? data: $typeMatch,$handPlay,$timeToPlay,$courtPosition,$genderToPlayAgainst,$playLocation")
                                             // Check if any of the required preference fields is null before updating UI
                                             if (typeMatch != null && handPlay != null && timeToPlay != null
                                                 && courtPosition != null && genderToPlayAgainst != null && playLocation != null
                                             ) {
                                                 // Update UI with fetched preferences
-                                                Log.d("AccountActivity", "4) Activated!")
                                                 locationText.text = playLocation
                                                 typeMatchText.text = "Type Match: " + typeMatch
-                                                Log.d("AccountActivity", "5) Textinput: ${typeMatchText.text}")
                                                 handPlayText.text = "Preferred Hand: " + handPlay
                                                 timeToPlayText.text = "Preferred Time: " + timeToPlay
                                                 courtPositionText.text = "Preferred Court Position: " + courtPosition
@@ -177,7 +159,7 @@ class AccountActivity : AppCompatActivity(){
                         }
                     }
 
-                    // Continue with the rest of your code...
+                    // additional code
                 }
             }
         }
@@ -191,8 +173,6 @@ class AccountActivity : AppCompatActivity(){
                 }
             }
         }
-
-        // ... (existing code)
 
         profileImage.setOnClickListener {
             // Open the image picker or camera to choose a new avatar
@@ -210,14 +190,11 @@ class AccountActivity : AppCompatActivity(){
         }
 
         logoutButton.setOnClickListener {
-            // Log out the user
             auth.signOut()
 
-            // Redirect to the login activity
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 
-            // Finish the current activity
             finish()
         }
     }
@@ -250,7 +227,6 @@ class AccountActivity : AppCompatActivity(){
                 }
             }
             .addOnFailureListener { e ->
-                // Handle the error
                 Log.e("AccountActivity", "Image upload failed: ${e.message}")
             }
     }
@@ -270,12 +246,10 @@ class AccountActivity : AppCompatActivity(){
                     Glide.with(this).load(avatarUrl).into(profileImage)
                 }
                 .addOnFailureListener { e ->
-                    // Handle the error
                     Log.e("AccountActivity", "Failed to update avatar URL: ${e.message}")
                 }
         }
     }
-
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1

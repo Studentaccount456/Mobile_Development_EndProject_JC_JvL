@@ -1,18 +1,16 @@
-<!-- activity_edit_profile.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Preferred Play Location -->
     <EditText
         android:id="@+id/playLocationEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Preferred Play Location"/>
 
-    <!-- Preferred Type Match Spinner -->
+    <!-- Spinner: Preferred Type Match -->
     <Spinner
         android:id="@+id/typeMatchSpinner"
         android:layout_width="match_parent"
@@ -28,7 +26,7 @@
         android:layout_marginTop="8dp"
         android:entries="@array/hand_play_options" />
 
-    <!-- Preferred Time to Play Spinner -->
+    <!-- Spinner: Preferred Time to Play -->
     <Spinner
         android:id="@+id/timeToPlaySpinner"
         android:layout_width="match_parent"
@@ -36,7 +34,7 @@
         android:layout_marginTop="8dp"
         android:entries="@array/time_to_play_options" />
 
-    <!-- Preferred Court Position Spinner -->
+    <!-- Spinner: Preferred Court Position -->
     <Spinner
         android:id="@+id/courtPositionSpinner"
         android:layout_width="match_parent"
@@ -44,7 +42,7 @@
         android:layout_marginTop="8dp"
         android:entries="@array/court_position_options" />
 
-    <!-- Preferred Gender to Play Against Spinner -->
+    <!-- Spinner: Preferred Gender to Play Against -->
     <Spinner
         android:id="@+id/genderSpinner"
         android:layout_width="match_parent"
