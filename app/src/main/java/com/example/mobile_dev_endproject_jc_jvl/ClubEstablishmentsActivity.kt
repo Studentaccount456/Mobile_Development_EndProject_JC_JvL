@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 class ClubEstablishmentsActivity : AppCompatActivity() {
 
@@ -18,6 +20,41 @@ class ClubEstablishmentsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.club_establishments_screen)
+        val tabLayout: TabLayout = findViewById(R.id.tabLayout_Establishments)
+
+        // Add tabs with titles
+        val establishmentsTab = tabLayout.newTab().setText("Establishments")
+        val reservationsTab = tabLayout.newTab().setText("Your Courts Reservations")
+        tabLayout.addTab(establishmentsTab)
+        tabLayout.addTab(reservationsTab)
+
+        // Set up a tab selected listener
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    0 -> {
+                        // Start EstablishmentsActivity
+                        //launchActivity(ClubEstablishmentsActivity::class.java)
+
+                    }
+                    1 -> {
+                        // Start YourCourtReservationsActivity
+                        launchActivity(YourCourtReservationsActivity::class.java)
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                // Handle tab unselection if needed
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                // Handle tab reselection if needed
+            }
+        })
+
+        // Select the tab you want (e.g., "Your Courts Reservations")
+        establishmentsTab.select()
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewClubEstablishments)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -60,7 +97,7 @@ class ClubEstablishmentsActivity : AppCompatActivity() {
         // Replace this with the actual path to your Firestore collection
         val collectionPath = "TheClubDetails"
 
-// Retrieve data from Firestore
+        // Retrieve data from Firestore
         db.collection(collectionPath)
             .get()
             .addOnSuccessListener { documents ->
