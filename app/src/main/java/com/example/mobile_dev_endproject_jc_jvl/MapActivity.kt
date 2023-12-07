@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
@@ -17,7 +18,6 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import java.lang.reflect.Field
 
 class MapActivity : AppCompatActivity() {
 
@@ -32,26 +32,68 @@ class MapActivity : AppCompatActivity() {
 
         setContentView(R.layout.map_screen)
 
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        bottomNavigationView.labelVisibilityMode = BottomNavigationView.LABEL_VISIBILITY_LABELED
+
+
+        for (i in 0 until bottomNavigationView.menu.size()) {
+            val menuItem = bottomNavigationView.menu.getItem(i)
+            val itemId = menuItem.itemId
+            val iconResource = menuItem.icon
+
+            Log.d("MapActivity", "Menu Item $itemId - Icon Resource: $iconResource")
+        }
+
+        Log.d("MapActivity", "BottomNavigationView is null: ${bottomNavigationView == null}")
+
+
+        bottomNavigationView.menu.findItem(R.id.navigation_home).isChecked = true
+
+        Log.d("MapActivity", "Menu item found: ${bottomNavigationView.menu.findItem(R.id.navigation_home) != null}")
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    launchActivity(HomeActivity::class.java)
+                    true
+                }
+                R.id.navigation_court -> {
+                    launchActivity(ClubActivity::class.java)
+                    true
+                }
+                R.id.navigation_match -> {
+                    launchActivity(MatchActivity::class.java)
+                    true
+                }
+                R.id.navigation_account -> {
+                    item.isChecked = true
+                    launchActivity(AccountActivity::class.java)
+                    true
+                }
+                else -> false
+            }
+        }
+
         mapView = findViewById(R.id.mapView)
         mapView.setTileSource(TileSourceFactory.MAPNIK)
         mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
         mapView.setMultiTouchControls(true)
         mapView.controller.setZoom(15.0)
 
-        // Fetch and add markers for clubs from Firebase
+        // Firebase Fetch
         fetchClubsFromFirebase()
 
-        // Add user's location overlay
         val myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(applicationContext), mapView)
         myLocationOverlay.enableMyLocation()
         mapView.overlays.add(myLocationOverlay)
 
-        // Set the default location to Antwerp
+        // Default location: Antwerp
         mapView.controller.setCenter(createGeoPoint(51.2194, 4.4025))
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
-                val threshold = 100 // You can adjust this value as needed
+                val threshold = 100
                 val itemList = getOverlayItemsList()
 
                 Log.d("MapActivity", "Tapped Point Coordinates: ${p.latitude}, ${p.longitude}")
@@ -68,8 +110,7 @@ class MapActivity : AppCompatActivity() {
                         return true
                     }
                 }
-
-                // If the tapped point is not close to any marker, do nothing
+                // When nothing is pressed
                 Log.d("MapActivity", "No marker tapped.")
                 return false
             }
@@ -77,7 +118,6 @@ class MapActivity : AppCompatActivity() {
 
 
             override fun longPressHelper(p: GeoPoint): Boolean {
-                // Handle long press if needed
                 return false
             }
         })
@@ -122,7 +162,6 @@ class MapActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                // Handle errors
                 Log.e("MapActivity", "Error fetching clubs from Firebase: $exception")
             }
     }
@@ -160,5 +199,10 @@ class MapActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDetach()
+    }
+
+    private fun launchActivity(cls: Class<*>) {
+        val intent = Intent(this, cls)
+        startActivity(intent)
     }
 }
