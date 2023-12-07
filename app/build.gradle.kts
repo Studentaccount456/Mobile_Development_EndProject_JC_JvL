@@ -64,7 +64,6 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation ("com.google.firebase:firebase-database:20.3.0")
     implementation ("org.osmdroid:osmdroid-android:6.1.10")
-    //implementation ("com.google.firebase:firebase-database:23.0.0")
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
@@ -93,5 +92,3 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
-// Ensure that the Google services plugin is applied outside the plugins block
-apply(plugin = "com.google.gms.google-services")
