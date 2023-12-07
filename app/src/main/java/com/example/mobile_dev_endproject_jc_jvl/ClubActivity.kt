@@ -61,12 +61,25 @@ class ClubActivity : AppCompatActivity() {
                     for (document in querySnapshot) {
                         // Get the ClubName field
                         val clubName = document.getString("ClubName")
+                        val clubAddress = document.getString("ClubAddress")
+                        val clubLocationGeoPoint = document.getGeoPoint("ClubLocation")
+                        val clubLocation =
+                            "${clubLocationGeoPoint?.latitude},${clubLocationGeoPoint?.longitude}"
 
                         if (clubName != null) {
                             // Create a TextView for each ClubName
                             val textView = TextView(this)
                             textView.text = clubName
 
+                            // Add OnClickListener to handle clicks
+                            textView.setOnClickListener {
+                                // Start ClubDetailsActivity with information about the selected club
+                                val intent = Intent(this, ClubDetailsActivity::class.java)
+                                intent.putExtra("clubName", clubName)
+                                intent.putExtra("clubAddress", clubAddress)
+                                intent.putExtra("clubLocation", clubLocation)
+                                startActivity(intent)
+                            }
 
 
                             // Add the TextView to the LinearLayout
