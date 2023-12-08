@@ -1,5 +1,6 @@
 package com.example.mobile_dev_endproject_jc_jvl
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import android.os.Parcelable
+import org.osmdroid.util.GeoPoint
 
 class EstablishmentDetailsActivity : AppCompatActivity() {
 
@@ -25,12 +28,10 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
         val courtAddress = intent.getStringExtra("ClubEstablishmentAddress")
         val establishmentName = intent.getStringExtra("EstablishmentName")
 
-        // Set data to views
         findViewById<TextView>(R.id.textViewClubName).text = clubName
         findViewById<TextView>(R.id.textViewCourtAddress).text = courtAddress
         findViewById<TextView>(R.id.textViewClubEstablishmentName).text = establishmentName
 
-        // Retrieve data from Firestore based on the ClubName
         fetchClubData(clubName)
     }
 
@@ -72,12 +73,22 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
         }
     }
 
-    // Define button click methods (you can implement the functionality here)
     fun onReserveClicked(view: View) {
         // Handle reserve button click
     }
 
     fun onReturnClicked(view: View) {
-        // Handle return button click
+        val receivedCoordinates = intent.getParcelableExtra<Parcelable>("TheMapCoordinates") as? GeoPoint
+
+        if (receivedCoordinates != null) {
+            // "TheMapCoordinates" received, send it back to MapActivity
+            val mapIntent = Intent(this, MapActivity::class.java)
+            mapIntent.putExtra("TheMapCoordinates", receivedCoordinates as Parcelable)
+            startActivity(mapIntent)
+        } else {
+            // "TheMapCoordinates" not received, go to ClubEstablishmentsActivity
+            val clubIntent = Intent(this, ClubEstablishmentsActivity::class.java)
+            startActivity(clubIntent)
+        }
     }
 }

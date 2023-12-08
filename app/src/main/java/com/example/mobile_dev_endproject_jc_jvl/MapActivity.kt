@@ -3,6 +3,7 @@ package com.example.mobile_dev_endproject_jc_jvl
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.util.Log
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
@@ -79,15 +80,21 @@ class MapActivity : AppCompatActivity() {
         mapView.setMultiTouchControls(true)
         mapView.controller.setZoom(15.0)
 
-        // Firebase Fetch
         fetchClubsFromFirebase()
 
         val myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(applicationContext), mapView)
         myLocationOverlay.enableMyLocation()
         mapView.overlays.add(myLocationOverlay)
 
-        // Default location: Antwerp
-        mapView.controller.setCenter(createGeoPoint(51.2194, 4.4025))
+
+        val mapCoordinates = intent.getParcelableExtra<GeoPoint>("TheMapCoordinates")
+        if (mapCoordinates != null) {
+            // If "TheMapCoordinates" is present, set the map location to the geopoint
+            setMapLocation(mapCoordinates)
+        } else {
+            // Default location: Antwerp
+            mapView.controller.setCenter(createGeoPoint(51.2194, 4.4025))
+        }
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
@@ -98,8 +105,7 @@ class MapActivity : AppCompatActivity() {
                     val distance = p.distanceToAsDouble(marker.point)
                     if (distance < threshold) {
                         // If the tapped point is close to a marker, start HomeActivity
-                        val intent = Intent(this@MapActivity, HomeActivity::class.java)
-                        startActivity(intent)
+                        launchEstablishmentDetailsActivity(marker)
                         return true
                     }
                 }
@@ -150,14 +156,18 @@ class MapActivity : AppCompatActivity() {
                         .addOnSuccessListener { establishmentResult ->
                             for (establishmentDocument in establishmentResult) {
                                 val clubEstablishmentName = establishmentDocument.getString("ClubEstablishmentName")
+                                val clubEstablishmentAddress = establishmentDocument.getString("ClubEstablishmentAddress")
                                 val clubEstablishmentLocation = establishmentDocument.getGeoPoint("ClubEstablishmentLocation")
 
                                 if (clubEstablishmentName != null && clubEstablishmentLocation != null) {
-                                    val clubMarker = OverlayItem(
+                                    val clubMarker = CustomOverlayItem(
                                         clubEstablishmentName,
                                         "Club Location",
                                         createGeoPoint(clubEstablishmentLocation.latitude, clubEstablishmentLocation.longitude)
                                     )
+                                    // Attach extra values
+                                    clubMarker.extraData = createMarkerExtrasData(clubName, clubEstablishmentAddress, clubEstablishmentName)
+
                                     val clubMarkerOverlay = ItemizedIconOverlay<OverlayItem>(
                                         applicationContext,
                                         listOf(clubMarker),
@@ -166,6 +176,8 @@ class MapActivity : AppCompatActivity() {
                                     mapView.overlays.add(clubMarkerOverlay)
                                 }
                             }
+                            // Force redraw of the map
+                            mapView.invalidate()
                         }
                         .addOnFailureListener { exception ->
                             Log.e("MapActivity", "Error fetching establishments from Firebase: $exception")
@@ -175,6 +187,21 @@ class MapActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.e("MapActivity", "Error fetching clubs from Firebase: $exception")
             }
+    }
+
+    private fun launchEstablishmentDetailsActivity(marker: OverlayItem) {
+        val intent = Intent(this@MapActivity, EstablishmentDetailsActivity::class.java)
+
+        if (marker is CustomOverlayItem) {
+            val extrasData = marker.extraData
+            intent.putExtra("ClubName", extrasData["ClubName"])
+            intent.putExtra("ClubEstablishmentAddress", extrasData["ClubEstablishmentAddress"])
+            intent.putExtra("EstablishmentName", extrasData["EstablishmentName"])
+        }
+
+        intent.putExtra("TheMapCoordinates", marker.point as Parcelable)
+
+        startActivity(intent)
     }
 
     private fun getOverlayItemsList(): List<OverlayItem> {
@@ -211,5 +238,18 @@ class MapActivity : AppCompatActivity() {
     private fun launchActivity(cls: Class<*>) {
         val intent = Intent(this, cls)
         startActivity(intent)
+    }
+
+    private fun setMapLocation(geopoint: GeoPoint) {
+        mapView.controller.setCenter(geopoint)
+    }
+
+    private fun createMarkerExtrasData(clubName: String, establishmentAddress: String?, establishmentName: String?): HashMap<String, String?> {
+        val extrasData = HashMap<String, String?>()
+        extrasData["ClubName"] = clubName
+        extrasData["ClubEstablishmentAddress"] = establishmentAddress
+        extrasData["EstablishmentName"] = establishmentName
+
+        return extrasData
     }
 }
