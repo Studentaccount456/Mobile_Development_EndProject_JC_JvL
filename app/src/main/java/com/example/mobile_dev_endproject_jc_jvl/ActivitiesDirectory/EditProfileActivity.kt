@@ -26,7 +26,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_profile)
+        setContentView(R.layout.edit_profile)
 
         // Initialize UI components
         playLocationEditText = findViewById(R.id.playLocationEditText)

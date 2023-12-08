@@ -41,7 +41,7 @@ class AccountActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account_screen)
+        setContentView(R.layout.account_screen)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -53,8 +53,8 @@ class AccountActivity : AppCompatActivity(){
                     launchActivity(HomeActivity::class.java)
                     true
                 }
-                R.id.navigation_court -> {
-                    launchActivity(ClubEstablishmentsActivity::class.java)
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {

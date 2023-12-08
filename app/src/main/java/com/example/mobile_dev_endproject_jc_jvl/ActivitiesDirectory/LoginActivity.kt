@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.login_screen)
 
         auth = FirebaseAuth.getInstance()
 
@@ -40,7 +40,18 @@ class LoginActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 loginUser(email, password)
             } else {
-                // Handle empty fields
+                // empty fields
+                if (email.isEmpty()) {
+                    emailEditText.setBackgroundResource(R.drawable.edit_text_error_border)
+                } else {
+                    emailEditText.setBackgroundResource(R.drawable.edit_text_default_border)
+                }
+
+                if (password.isEmpty()) {
+                    passwordEditText.setBackgroundResource(R.drawable.edit_text_error_border)
+                } else {
+                    passwordEditText.setBackgroundResource(R.drawable.edit_text_default_border)
+                }
             }
         }
 
@@ -67,6 +78,10 @@ class LoginActivity : AppCompatActivity() {
                 }
                 val errorMessage = task.exception?.message ?: "Login failed"
                 showSnackbar(errorMessage)
+
+                // Set red contour for email and password fields
+                emailEditText.setBackgroundResource(R.drawable.edit_text_error_border)
+                passwordEditText.setBackgroundResource(R.drawable.edit_text_error_border)
             }
     }
     private fun showSnackbar(message: String) {

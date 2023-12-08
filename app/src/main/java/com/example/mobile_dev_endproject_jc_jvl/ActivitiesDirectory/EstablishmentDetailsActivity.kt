@@ -20,7 +20,7 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.club_establishmentdetails_screen)
+        setContentView(R.layout.establishmentdetails_screen)
 
         firestore = FirebaseFirestore.getInstance()
 
@@ -29,7 +29,6 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
         val courtAddress = intent.getStringExtra("ClubEstablishmentAddress")
         val establishmentName = intent.getStringExtra("EstablishmentName")
 
-        findViewById<TextView>(R.id.textViewClubName).text = clubName
         findViewById<TextView>(R.id.textViewCourtAddress).text = courtAddress
         findViewById<TextView>(R.id.textViewClubEstablishmentName).text = establishmentName
 
@@ -48,10 +47,12 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot: DocumentSnapshot? ->
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     // DocumentSnapshot exists, extract data
+                    val clubNameWithSpaces = documentSnapshot.getString("ClubName")
                     val clubDescription = documentSnapshot.getString("ClubDescription")
                     val imageURL = documentSnapshot.getString("ClubLogo")
 
                     // Set data to the corresponding TextViews
+                    findViewById<TextView>(R.id.textViewClubName).text = clubNameWithSpaces
                     findViewById<TextView>(R.id.textViewClubDescription).text = clubDescription
                     loadClubLogo(imageURL)
                 } else {
@@ -88,7 +89,7 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
             startActivity(mapIntent)
         } else {
             // "TheMapCoordinates" not received, go to ClubEstablishmentsActivity
-            val clubIntent = Intent(this, ClubEstablishmentsActivity::class.java)
+            val clubIntent = Intent(this, EstablishmentsActivity::class.java)
             startActivity(clubIntent)
         }
     }

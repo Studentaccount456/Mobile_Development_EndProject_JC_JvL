@@ -75,8 +75,6 @@ fun MainScreen(navController: NavHostController) {
         Button(onClick = { navController.navigate("login") }) {
             Text("Go to Login Screen")
         }
-        // Login screen composable
-        LoginScreen()
     }
 }
 
@@ -96,59 +94,6 @@ private fun fetchDataFromFirestore(onSuccess: (String?) -> Unit) {
         }
         .addOnFailureListener { e ->
             onSuccess(null)
-        }
-}
-
-@Composable
-fun LoginScreen() {
-    // State to track whether the Firestore data creation is in progress
-    var creationInProgress by remember { mutableStateOf(false) }
-
-    // Function to create data in Firestore
-    fun createDataInFirestore() {
-        if (!creationInProgress) {
-            creationInProgress = true
-            createFirestoreData {
-                // Handle success or failure if needed
-                creationInProgress = false
-            }
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Button to create data in Firestore
-        Button(onClick = { createDataInFirestore() }) {
-            Text("Create Data in Firestore")
-        }
-    }
-}
-
-// Function to create data in Firestore
-private fun createFirestoreData(onCompletion: () -> Unit) {
-    val db = FirebaseFirestore.getInstance()
-    val collectionRef = db.collection("ElTestoPurposes")
-    val documentRef = collectionRef.document("LeCoolTest")
-
-    // Data to be added to Firestore
-    val data = hashMapOf(
-        "ThisIsATest" to "ElLocoMoco"
-    )
-
-    // Create the collection and document
-    collectionRef.add(data)
-        .addOnSuccessListener { documentReference ->
-            // Handle success
-            onCompletion()
-        }
-        .addOnFailureListener { e ->
-            // Handle failure
-            onCompletion()
         }
 }
 

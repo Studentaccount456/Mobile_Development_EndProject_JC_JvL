@@ -22,8 +22,8 @@ class MatchActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
-                R.id.navigation_court -> {
-                    launchActivity(ClubEstablishmentsActivity::class.java)
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {

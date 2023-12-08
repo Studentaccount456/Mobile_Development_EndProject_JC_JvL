@@ -14,7 +14,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class ClubEstablishmentsActivity : AppCompatActivity() {
+class EstablishmentsActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val clubEstablishments = mutableListOf<ClubEstablishment>()
@@ -22,7 +22,7 @@ class ClubEstablishmentsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.club_establishments_screen)
+        setContentView(R.layout.establishments_screen)
         val tabLayout: TabLayout = findViewById(R.id.tabLayout_Establishments)
 
         // Add tabs with titles
@@ -65,7 +65,7 @@ class ClubEstablishmentsActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         // Right Icon active
-        bottomNavigationView.menu.findItem(R.id.navigation_court).isChecked = true
+        bottomNavigationView.menu.findItem(R.id.navigation_establishment).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -73,8 +73,8 @@ class ClubEstablishmentsActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
-                R.id.navigation_court -> {
-                    launchActivity(ClubEstablishmentsActivity::class.java)
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {

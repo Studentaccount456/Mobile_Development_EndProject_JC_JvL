@@ -6,9 +6,9 @@
         android:icon="@drawable/ic_home" />
 
     <item
-        android:id="@+id/navigation_court"
+        android:id="@+id/navigation_establishment"
         android:icon="@drawable/ic_field"
-        android:title="Court" />
+        android:title="Establishment" />
 
     <item
         android:id="@+id/navigation_match"

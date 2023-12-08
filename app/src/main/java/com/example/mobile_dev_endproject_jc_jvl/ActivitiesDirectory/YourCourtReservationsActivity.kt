@@ -11,7 +11,7 @@ class YourCourtReservationsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.your_reservations_courts)
+        setContentView(R.layout.yourreservationscourts_screen)
         val tabLayout: TabLayout = findViewById(R.id.tabLayout_reservationCourt)
 
         // Add tabs with titles
@@ -26,7 +26,7 @@ class YourCourtReservationsActivity : AppCompatActivity() {
                 when (tab.position) {
                     0 -> {
                         // Start EstablishmentsActivity
-                        launchActivity(ClubEstablishmentsActivity::class.java)
+                        launchActivity(EstablishmentsActivity::class.java)
                     }
                     1 -> {
                         // Start YourCourtReservationsActivity
@@ -50,7 +50,7 @@ class YourCourtReservationsActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         // Right Icon active
-        bottomNavigationView.menu.findItem(R.id.navigation_court).isChecked = true
+        bottomNavigationView.menu.findItem(R.id.navigation_establishment).isChecked = true
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -58,8 +58,8 @@ class YourCourtReservationsActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
-                R.id.navigation_court -> {
-                    launchActivity(ClubEstablishmentsActivity::class.java)
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
                 R.id.navigation_match -> {

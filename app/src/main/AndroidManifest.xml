@@ -77,7 +77,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivitiesDirectory.ClubEstablishmentsActivity"
+            android:name=".ActivitiesDirectory.EstablishmentsActivity"
             android:exported="true"
             android:label="Padelero"
             android:screenOrientation="portrait"
