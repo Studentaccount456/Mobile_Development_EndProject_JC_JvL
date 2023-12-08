@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl
+package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Parcelable
+import com.example.mobile_dev_endproject_jc_jvl.R
 import org.osmdroid.util.GeoPoint
 
 class EstablishmentDetailsActivity : AppCompatActivity() {

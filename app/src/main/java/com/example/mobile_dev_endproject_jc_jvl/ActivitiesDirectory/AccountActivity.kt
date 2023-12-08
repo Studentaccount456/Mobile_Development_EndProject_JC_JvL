@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl
+package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
 
 import android.content.Intent
 import android.net.Uri
@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage;
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.mobile_dev_endproject_jc_jvl.R
 
 class AccountActivity : AppCompatActivity(){
 

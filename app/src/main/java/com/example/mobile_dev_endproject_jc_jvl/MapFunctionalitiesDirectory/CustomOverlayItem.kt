@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl
+package com.example.mobile_dev_endproject_jc_jvl.MapFunctionalitiesDirectory
 
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.views.overlay.OverlayItem
