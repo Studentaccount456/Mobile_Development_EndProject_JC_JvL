@@ -21,7 +21,7 @@ import com.example.mobile_dev_endproject_jc_jvl.R
 class AccountActivity : AppCompatActivity(){
 
     private lateinit var profileImage: ImageView
-    private lateinit var nicknameText: TextView
+    private lateinit var usernameText: TextView
     private lateinit var locationText: TextView
     private lateinit var followersText: TextView
     private lateinit var followingText: TextView
@@ -72,7 +72,7 @@ class AccountActivity : AppCompatActivity(){
 
         // Initialize views
         profileImage = findViewById(R.id.profileImage)
-        nicknameText = findViewById(R.id.nicknameText)
+        usernameText = findViewById(R.id.usernameText)
         locationText = findViewById(R.id.locationText)
         followersText = findViewById(R.id.followersText)
         followingText = findViewById(R.id.followingText)
@@ -88,6 +88,7 @@ class AccountActivity : AppCompatActivity(){
 
         // Fetch data from Firestore
         val userId = auth.currentUser?.uid
+        var sanitizedUsername: String? = null
         if (userId != null) {
             val userRef = db.collection("ThePlayers").document(userId)
             userRef.get().addOnSuccessListener { document ->
@@ -105,13 +106,16 @@ class AccountActivity : AppCompatActivity(){
                                 val followersInformation = profileDetailsData["Followers"]?.toString()?.toInt()
                                 val followingInformation = profileDetailsData["Following"]?.toString()?.toInt()
                                 val avatarUrl = profileDetailsData["Avatar"] as? String
-                                val nickname = profileDetailsData["Nickname"] as? String
+                                val username = profileDetailsData["Username"] as? String
+
+                                // Sanitize username
+                                sanitizedUsername = username?.replace("[\\s,\\\\/]".toRegex(), "")
 
                                 // Check if any of the required fields is null before updating UI
-                                if (avatarUrl != null && nickname != null && levelInformation != null && followersInformation != null && followingInformation != null) {
+                                if (avatarUrl != null && username != null && levelInformation != null && followersInformation != null && followingInformation != null) {
                                     // Update UI with fetched data
                                     Glide.with(this).load(avatarUrl).into(profileImage)
-                                    nicknameText.text = nickname
+                                    usernameText.text = username
                                     followersText.text = "Followers: " + followersInformation.toString()
                                     followingText.text = "Following: " + followingInformation.toString()
                                     levelText.text = "Level: " + levelInformation.toString()
@@ -170,7 +174,8 @@ class AccountActivity : AppCompatActivity(){
                 val data: Intent? = result.data
                 if (data != null && data.data != null) {
                     val imageUri: Uri = data.data!!
-                    uploadImageToFirebaseStorage(imageUri)
+                    sanitizedUsername?.let { uploadImageToFirebaseStorage(imageUri, it) }
+
                 }
             }
         }
@@ -210,7 +215,7 @@ class AccountActivity : AppCompatActivity(){
         pickImageLauncher.launch(galleryIntent)
     }
 
-    private fun uploadImageToFirebaseStorage(imageUri: Uri) {
+    private fun uploadImageToFirebaseStorage(imageUri: Uri, sanitizedUsername: String) {
         // Implement logic to upload the image to Firebase Storage
         // You can use the Firebase Storage API to upload the image
         // Example:
@@ -224,7 +229,7 @@ class AccountActivity : AppCompatActivity(){
                 // Get the download URL and update the user's profile
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
                     // Update the user's avatar URL in Firestore
-                    updateAvatarUrl(uri.toString())
+                    updateAvatarUrl(uri.toString(), sanitizedUsername)
                 }
             }
             .addOnFailureListener { e ->
@@ -232,12 +237,12 @@ class AccountActivity : AppCompatActivity(){
             }
     }
 
-    private fun updateAvatarUrl(avatarUrl: String) {
+    private fun updateAvatarUrl(avatarUrl: String, sanitizedUsername: String) {
         // Update the "Avatar" field in Firestore
         val userId = auth.currentUser?.uid
         if (userId != null) {
             val userRef = db.collection("ThePlayers").document(userId)
-            val profileDetailsRef = userRef.collection("TheProfileDetails").document("Nickname")
+            val profileDetailsRef = userRef.collection("TheProfileDetails").document(sanitizedUsername)
 
             // Update the "Avatar" field with the new URL
             profileDetailsRef.update("Avatar", avatarUrl)

@@ -43,6 +43,18 @@ class RegisterActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty()) {
                 registerUser(email, password)
             } else {
+                // Check which fields are empty and display corresponding error messages
+                when {
+                    email.isEmpty() -> {
+                        emailEditText.error = "Email cannot be empty"
+                    }
+                    password.isEmpty() -> {
+                        passwordEditText.error = "Password cannot be empty"
+                    }
+                    username.isEmpty() -> {
+                        usernameEditText.error = "Username cannot be empty"
+                    }
+                }
                 showSnackbar("Please fill in all fields.")
             }
         }
@@ -59,15 +71,19 @@ class RegisterActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     user?.let {
                         val userId = user.uid
+                        val username = usernameEditText.text.toString().trim()
                         // Add user to "ThePlayers" collection
                         val player = hashMapOf(
                             "userId" to userId,
                             "email" to email,
                             "username" to usernameEditText.text.toString().trim()
                         )
+
                         val db = Firebase.firestore
+                        val sanitizedUsername = username.replace("[\\s,\\\\/]".toRegex(), "")
+
                         db.collection("ThePlayers")
-                            .document(userId) // Use userId as documentId
+                            .document(userId)
                             .set(player)
                             .addOnSuccessListener {
                                 // After success create sub-collection "TheProfileDetails" and its document
@@ -76,12 +92,13 @@ class RegisterActivity : AppCompatActivity() {
                                     "Followers" to 0,
                                     "Following" to 0,
                                     "Level" to 1,
-                                    "Nickname" to usernameEditText.text.toString().trim()
+                                    "Username" to usernameEditText.text.toString().trim()
                                 )
+
                                 db.collection("ThePlayers")
                                     .document(userId)
                                     .collection("TheProfileDetails")
-                                    .document("Nickname")
+                                    .document(sanitizedUsername)
                                     .set(profileDetails)
                                     .addOnSuccessListener {
                                         // After success create sub-collection "ThePreferencesPlayer" and its document
@@ -96,7 +113,7 @@ class RegisterActivity : AppCompatActivity() {
                                         db.collection("ThePlayers")
                                             .document(userId)
                                             .collection("ThePreferencesPlayer")
-                                            .document("UserId")
+                                            .document("Preferences")
                                             .set(preferencesPlayer)
                                             .addOnSuccessListener {
                                                 // Document creation successful
