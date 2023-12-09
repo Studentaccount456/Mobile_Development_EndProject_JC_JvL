@@ -1,5 +1,6 @@
-package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
+package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -39,6 +40,7 @@ class AccountActivity : AppCompatActivity(){
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.account_screen)
@@ -116,9 +118,9 @@ class AccountActivity : AppCompatActivity(){
                                     // Update UI with fetched data
                                     Glide.with(this).load(avatarUrl).into(profileImage)
                                     usernameText.text = username
-                                    followersText.text = "Followers: " + followersInformation.toString()
-                                    followingText.text = "Following: " + followingInformation.toString()
-                                    levelText.text = "Level: " + levelInformation.toString()
+                                    followersText.text = "Followers: $followersInformation"
+                                    followingText.text = "Following: $followingInformation"
+                                    levelText.text = "Level: $levelInformation"
 
 
                                     // Fetch "ThePreferencesPlayer" sub-collection
@@ -143,11 +145,13 @@ class AccountActivity : AppCompatActivity(){
                                             ) {
                                                 // Update UI with fetched preferences
                                                 locationText.text = playLocation
-                                                typeMatchText.text = "Type Match: " + typeMatch
-                                                handPlayText.text = "Preferred Hand: " + handPlay
-                                                timeToPlayText.text = "Preferred Time: " + timeToPlay
-                                                courtPositionText.text = "Preferred Court Position: " + courtPosition
-                                                genderToPlayAgainstText.text = "Preferred Gender to play against: " + genderToPlayAgainst
+                                                typeMatchText.text = "Type Match: $typeMatch"
+                                                handPlayText.text = "Preferred Hand: $handPlay"
+                                                timeToPlayText.text = "Preferred Time: $timeToPlay"
+                                                courtPositionText.text =
+                                                    "Preferred Court Position: $courtPosition"
+                                                genderToPlayAgainstText.text =
+                                                    "Preferred Gender to play against: $genderToPlayAgainst"
                                             } else {
                                                 // Handle the case where some preference fields are null
                                                 // Show an error message or take appropriate action
@@ -224,7 +228,7 @@ class AccountActivity : AppCompatActivity(){
 
         // Upload file to Firebase Storage
         imageRef.putFile(imageUri)
-            .addOnSuccessListener { taskSnapshot ->
+            .addOnSuccessListener { //taskSnapshot ->
                 // Image uploaded successfully
                 // Get the download URL and update the user's profile
                 imageRef.downloadUrl.addOnSuccessListener { uri ->

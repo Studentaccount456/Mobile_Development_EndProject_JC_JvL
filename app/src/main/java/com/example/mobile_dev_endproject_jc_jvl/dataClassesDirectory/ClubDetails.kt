@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl.DataClassesDirectory
+package com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory
 
 import android.os.Parcel
 import android.os.Parcelable

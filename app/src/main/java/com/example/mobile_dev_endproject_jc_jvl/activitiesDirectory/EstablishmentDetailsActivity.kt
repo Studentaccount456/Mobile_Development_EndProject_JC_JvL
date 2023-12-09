@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
+package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
 import android.content.Intent
 import android.os.Bundle
@@ -60,7 +60,7 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception: Exception ->
-                // Handle errors
+                Log.e("EstablishmentDetailsActivity", "Exception occurred: ${exception.message}", exception)
             }
     }
 
@@ -79,16 +79,15 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
         // Handle reserve button click
     }
 
+    // .xml relies on view!!!!
     fun onReturnClicked(view: View) {
         val receivedCoordinates = intent.getParcelableExtra<Parcelable>("TheMapCoordinates") as? GeoPoint
 
         if (receivedCoordinates != null) {
-            // "TheMapCoordinates" received, send it back to MapActivity
             val mapIntent = Intent(this, MapActivity::class.java)
             mapIntent.putExtra("TheMapCoordinates", receivedCoordinates as Parcelable)
             startActivity(mapIntent)
         } else {
-            // "TheMapCoordinates" not received, go to ClubEstablishmentsActivity
             val clubIntent = Intent(this, EstablishmentsActivity::class.java)
             startActivity(clubIntent)
         }

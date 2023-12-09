@@ -1,10 +1,10 @@
-package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
+package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mobile_dev_endproject_jc_jvl.DataClassesDirectory.Preferences
+import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.Preferences
 import com.example.mobile_dev_endproject_jc_jvl.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -77,7 +77,7 @@ class EditProfileActivity : AppCompatActivity() {
                     courtPositionSpinner.setSelection(getIndex(courtPositionSpinner, preferences.preferredCourtPosition))
                     genderSpinner.setSelection(getIndex(genderSpinner, preferences.preferredGenderToPlayAgainst))
                 } else {
-
+                    // Error handling
                 }
             }
     }

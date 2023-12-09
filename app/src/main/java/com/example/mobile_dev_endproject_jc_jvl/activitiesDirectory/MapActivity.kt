@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
+package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mobile_dev_endproject_jc_jvl.MapFunctionalitiesDirectory.CustomOverlayItem
+import com.example.mobile_dev_endproject_jc_jvl.mapFunctionalitiesDirectory.CustomOverlayItem
 import com.example.mobile_dev_endproject_jc_jvl.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore

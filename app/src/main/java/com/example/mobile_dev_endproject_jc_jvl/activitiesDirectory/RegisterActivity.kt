@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
+package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
 import android.content.Intent
 import com.google.firebase.firestore.ktx.firestore
@@ -26,7 +26,6 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.register_screen)
 
-        val db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
 
         emailEditText = findViewById(R.id.emailRegisterEditText)

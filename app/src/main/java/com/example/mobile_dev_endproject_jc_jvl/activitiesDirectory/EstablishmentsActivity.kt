@@ -1,4 +1,4 @@
-package com.example.mobile_dev_endproject_jc_jvl.ActivitiesDirectory
+package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobile_dev_endproject_jc_jvl.AdaptersDirectory.ClubEstablishmentAdapter
-import com.example.mobile_dev_endproject_jc_jvl.DataClassesDirectory.ClubEstablishment
+import com.example.mobile_dev_endproject_jc_jvl.adaptersDirectory.ClubEstablishmentAdapter
+import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.ClubEstablishment
 import com.example.mobile_dev_endproject_jc_jvl.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
@@ -109,7 +109,7 @@ class EstablishmentsActivity : AppCompatActivity() {
                     val clubNameDocumentId = document.id
                     val establishmentsCollectionPath = "$collectionPath/$clubNameDocumentId/TheClubEstablishments"
 
-                    // Retrieve data from the subcollection
+                    // Retrieve data from the sub-collection
                     db.collection(establishmentsCollectionPath)
                         .get()
                         .addOnSuccessListener { establishmentDocuments ->
