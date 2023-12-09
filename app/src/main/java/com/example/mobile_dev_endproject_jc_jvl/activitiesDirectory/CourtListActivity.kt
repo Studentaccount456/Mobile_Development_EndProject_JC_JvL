@@ -20,6 +20,7 @@ class CourtListActivity : AppCompatActivity() {
     private lateinit var sanitizedClubEstablishment: String
     private lateinit var sentThroughClubName: String
     private lateinit var sentThroughClubEstablishment: String
+    private lateinit var sentThroughCourtName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +65,7 @@ class CourtListActivity : AppCompatActivity() {
 
                 for (document in documents) {
                     val courtName = document.getString("CourtName") ?: ""
+                    sentThroughCourtName = document.getString("CourtName") ?: ""  // New line
                     Log.d("CourtListActivity", "3) Fetch?: $courtName")
                     adapter.addData(courtName)
                 }
@@ -78,10 +80,15 @@ class CourtListActivity : AppCompatActivity() {
 
     private fun navigateToAccountActivity(sanitizedCourtName: String) {
         // Create an explicit intent to navigate to AccountActivity
-        val intent = Intent(this, AccountActivity::class.java).apply {
+        val sanitizedCourtName = sentThroughCourtName.replace("[\\s,\\\\/]".toRegex(), "")
+        Log.d("CourtListActivity", "The right stuff sent? $sentThroughCourtName, $sanitizedCourtName")
+        val intent = Intent(this, ReservationActivity::class.java).apply {
             putExtra("SanitizedClubName", sanitizedClubName)
             putExtra("SanitizedClubEstablishment", sanitizedClubEstablishment)
             putExtra("SanitizedCourtName", sanitizedCourtName)
+            putExtra("sentThroughClubName", sentThroughClubName)
+            putExtra("sentThroughClubEstablishment", sentThroughClubEstablishment)
+            putExtra("sentThroughCourtName", sentThroughCourtName)
         }
         startActivity(intent)
     }
