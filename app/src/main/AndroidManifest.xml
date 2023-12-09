@@ -22,17 +22,6 @@
             android:name=".activitiesDirectory.EstablishmentDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activitiesDirectory.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activitiesDirectory.LoginActivity"
             android:exported="true"
             android:label="Padelero"
