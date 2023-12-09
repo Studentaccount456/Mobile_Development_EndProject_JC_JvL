@@ -17,6 +17,10 @@ import org.osmdroid.util.GeoPoint
 class EstablishmentDetailsActivity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
+    private var sanitizedClubName: String? = null
+    private var sanitizedEstablishmentName: String? = null
+    private lateinit var sentThroughClubName: String
+    private lateinit var sentThroughClubEstablishment: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,14 +29,20 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
 
         val intent = intent
-        val clubName = intent.getStringExtra("ClubName")
+        sentThroughClubName = intent.getStringExtra("ClubName").toString()
+        if (sentThroughClubName != null) {
+            sanitizedClubName = sentThroughClubName.replace("[\\s,\\\\/]".toRegex(), "")
+        }
         val courtAddress = intent.getStringExtra("ClubEstablishmentAddress")
-        val establishmentName = intent.getStringExtra("EstablishmentName")
+        sentThroughClubEstablishment = intent.getStringExtra("EstablishmentName").toString()
+        if (sentThroughClubEstablishment != null) {
+            sanitizedEstablishmentName = sentThroughClubEstablishment.replace("[\\s,\\\\/]".toRegex(), "")
+        }
 
         findViewById<TextView>(R.id.textViewCourtAddress).text = courtAddress
-        findViewById<TextView>(R.id.textViewClubEstablishmentName).text = establishmentName
+        findViewById<TextView>(R.id.textViewClubEstablishmentName).text = sentThroughClubEstablishment
 
-        fetchClubData(clubName)
+        fetchClubData(sentThroughClubName)
     }
 
     private fun fetchClubData(clubName: String?) {
@@ -76,7 +86,12 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
     }
 
     fun onReserveClicked(view: View) {
-        // Handle reserve button click
+        val mapIntent = Intent(this, CourtListActivity::class.java)
+        mapIntent.putExtra("SanitizedClubName", sanitizedClubName)
+        mapIntent.putExtra("SanitizedClubEstablishment", sanitizedEstablishmentName)
+        mapIntent.putExtra("sentThroughClubName", sentThroughClubName)
+        mapIntent.putExtra("sentThroughClubEstablishment", sentThroughClubEstablishment)
+        startActivity(mapIntent)
     }
 
     // .xml relies on view!!!!
