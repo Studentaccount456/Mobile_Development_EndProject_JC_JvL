@@ -1,5 +1,6 @@
 package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
@@ -23,8 +24,8 @@ class ReservationActivity : AppCompatActivity() {
 
     private lateinit var establishmentTextView: TextView
     private lateinit var courtNameTextView: TextView
-    private var startingTime_Play: String = ""
-    private var endingTime_Play: String = ""
+    private var startingTimePlay: String = ""
+    private var endingTimePlay: String = ""
     private lateinit var createMatchCheckBox: CheckBox
     private lateinit var orderFieldButton: Button
     private lateinit var returnButton: Button
@@ -35,12 +36,13 @@ class ReservationActivity : AppCompatActivity() {
     private var monthReservation: Int = 0
     private var dayReservation: Int = 0
     private lateinit var timeGrid: LinearLayout
-    var takenTimeSlots = mutableListOf<String>()
+    private var takenTimeSlots = mutableListOf<String>()
     private lateinit var reservedTimeText : TextView
 
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reservation_screen)
@@ -106,7 +108,7 @@ class ReservationActivity : AppCompatActivity() {
                 params.setMargins(24, 24, 24, 24)
                 timeSquare.layoutParams = params
                 timeSquare.text = startTime
-                timeSquare.tag = "$startTime"
+                timeSquare.tag = startTime
                 timeSquare.gravity = Gravity.CENTER
                 timeSquare.setBackgroundResource(R.drawable.selector_time_square)
                 timeSquare.setTextColor(ContextCompat.getColorStateList(this, R.color.text_color)) // Add this line
@@ -119,8 +121,8 @@ class ReservationActivity : AppCompatActivity() {
                         view.isSelected = !view.isSelected
                         val selectedTime = view.tag as String
                         val reservedEndTime = calculateReservedEndTime(selectedTime)
-                        startingTime_Play = selectedTime;
-                        endingTime_Play = reservedEndTime
+                        startingTimePlay = selectedTime;
+                        endingTimePlay = reservedEndTime
                         reservedTimeText.text = "Time Reserved: $selectedTime to $reservedEndTime"
                     }
 
@@ -139,13 +141,13 @@ class ReservationActivity : AppCompatActivity() {
         // Set click listener for the "Order Field" button
         orderFieldButton.setOnClickListener {
             // Handle order field logic
-            if (startingTime_Play == "" || endingTime_Play == "") {
+            if (startingTimePlay == "" || endingTimePlay == "") {
                 // Show a warning to the user
                 // You can display a toast, dialog, or any other suitable UI element to notify the user
                 // For example, using a Toast:
                 findViewById<View>(R.id.redBorder).visibility = View.VISIBLE
                 Toast.makeText(this, "Please select a time slot before ordering the field", Toast.LENGTH_SHORT).show()
-            } else if (takenTimeSlots != null && takenTimeSlots.any { it.contains(startingTime_Play) || it.contains(endingTime_Play) }) {
+            } else if (takenTimeSlots.any { it.contains(startingTimePlay) || it.contains(endingTimePlay) }) {
                 findViewById<View>(R.id.redBorder).visibility = View.VISIBLE
                 Toast.makeText(this, "Times overlap! Can't make reservation!", Toast.LENGTH_SHORT).show()
 
@@ -184,8 +186,8 @@ class ReservationActivity : AppCompatActivity() {
         val monthForFirestore = monthReservation
         val dayForFirestore = dayReservation
 
-        val startTimeForFireStoreInsert = startingTime_Play
-        val endTimeForFireStoreInsert = endingTime_Play
+        val startTimeForFireStoreInsert = startingTimePlay
+        val endTimeForFireStoreInsert = endingTimePlay
 
         val dateReservation = "$yearForFirestore-$monthForFirestore-$dayForFirestore"
         val dateReservationSanitized = formatDate(yearForFirestore, monthForFirestore, dayForFirestore)
@@ -302,7 +304,9 @@ private fun calculateReservedEndTime(selectedTime: String): String {
     val calendar = Calendar.getInstance()
 
     val startTime = sdf.parse(selectedTime)
-    calendar.time = startTime
+    if (startTime != null) {
+        calendar.time = startTime
+    }
     calendar.add(Calendar.MINUTE, 90)
 
     return sdf.format(calendar.time)
@@ -337,6 +341,7 @@ private fun calculateReservedEndTime(selectedTime: String): String {
         datePickerDialog.show()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateDateTextView() {
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val formattedDate = dateFormat.format(selectedDate)
@@ -352,7 +357,7 @@ private fun calculateReservedEndTime(selectedTime: String): String {
     }
 
 
-    fun fetchTimeSlots(
+    private fun fetchTimeSlots(
         sanitizedClubName: String,
         sanitizedClubEstablishment: String,
         sanitizedCourtName: String,
@@ -451,10 +456,9 @@ private fun calculateReservedEndTime(selectedTime: String): String {
         val updatedReservedTimeSlots = mutableListOf<String>()
         Log.d("ReservationActivity", "before Show list:$reservedTimeSlots")
 
-        for (i in 0 until reservedTimeSlots.size) {
-            val timeSlot = reservedTimeSlots[i]
-            val startTime = timeSlot.split("-")[0].trim()
-            val endTime = timeSlot.split("-")[1].trim()
+        for (element in reservedTimeSlots) {
+            val startTime = element.split("-")[0].trim()
+            val endTime = element.split("-")[1].trim()
 
             // Add the original time slot to the updated list
             updatedReservedTimeSlots.add(startTime)
@@ -462,8 +466,8 @@ private fun calculateReservedEndTime(selectedTime: String): String {
             if (endTime.endsWith("30")) {
                 // If the ending timeslot ends with "30"
                 val hour = endTime.split(":")[0].toInt()
-                var firstTime: String = ""
-                var secondTime: String = ""
+                var firstTime: String
+                var secondTime: String
                 if (hour <= 10) {
                     firstTime = "0${hour - 1}:30"
                     secondTime = "0${hour}:00"
@@ -477,8 +481,8 @@ private fun calculateReservedEndTime(selectedTime: String): String {
             } else if (endTime.endsWith("00")) {
                 // If the ending timeslot ends with "00"
                 val hour = endTime.split(":")[0].toInt() - 1
-                var firstTime: String = ""
-                var secondTime: String = ""
+                var firstTime: String
+                var secondTime: String
                 if (hour <= 10) {
                     firstTime = "0$hour:00"
                     secondTime = "0$hour:30"
@@ -493,12 +497,7 @@ private fun calculateReservedEndTime(selectedTime: String): String {
         }
 
         Log.d("ReservationActivity", "Show list:$updatedReservedTimeSlots")
-        if (updatedReservedTimeSlots != null) {
-            takenTimeSlots = updatedReservedTimeSlots
-        } else {
-            // Handle the case where updatedReservedTimeSlots is null
-            // You might want to assign a default value or take some other action
-        }
+        takenTimeSlots = updatedReservedTimeSlots
         // Apply the disabled state to the UI
         for (i in 0 until parentLayout.childCount) {
             val rowLayout = parentLayout.getChildAt(i) as LinearLayout
@@ -540,8 +539,8 @@ private fun calculateReservedEndTime(selectedTime: String): String {
             }
         }
         reservedTimeText.text = "" // Set reservedTimeText to an empty string
-        startingTime_Play = ""
-        endingTime_Play = ""
+        startingTimePlay = ""
+        endingTimePlay = ""
     }
 
 }
