@@ -4,11 +4,14 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.mobile_dev_endproject_jc_jvl.R
@@ -20,8 +23,8 @@ class ReservationActivity : AppCompatActivity() {
 
     private lateinit var establishmentTextView: TextView
     private lateinit var courtNameTextView: TextView
-    private lateinit var startingTime_Play: String
-    private lateinit var endingTime_Play: String
+    private var startingTime_Play: String = ""
+    private var endingTime_Play: String = ""
     private lateinit var createMatchCheckBox: CheckBox
     private lateinit var orderFieldButton: Button
     private lateinit var returnButton: Button
@@ -59,6 +62,8 @@ class ReservationActivity : AppCompatActivity() {
         val timeGrid: LinearLayout = findViewById(R.id.timeGrid)
         val reservedTimeText: TextView = findViewById(R.id.reservedTimeText)
         // Time
+        val scrollView: ScrollView = findViewById(R.id.yourScrollViewId)
+
         createMatchCheckBox = findViewById(R.id.createMatchCheckBox)
         orderFieldButton = findViewById(R.id.orderFieldButton)
         returnButton = findViewById(R.id.returnButton)
@@ -123,7 +128,16 @@ class ReservationActivity : AppCompatActivity() {
         // Set click listener for the "Order Field" button
         orderFieldButton.setOnClickListener {
             // Handle order field logic
-            orderField()
+            if (startingTime_Play == "" || endingTime_Play == "") {
+                // Show a warning to the user
+                // You can display a toast, dialog, or any other suitable UI element to notify the user
+                // For example, using a Toast:
+                findViewById<View>(R.id.redBorder).visibility = View.VISIBLE
+                Toast.makeText(this, "Please select a time slot before ordering the field", Toast.LENGTH_SHORT).show()
+            } else {
+                findViewById<View>(R.id.redBorder).visibility = View.GONE
+                orderField()
+            }
         }
 
         // Set click listener for the "Return" button
@@ -134,6 +148,7 @@ class ReservationActivity : AppCompatActivity() {
     }
 
     private fun orderField() {
+
         val sanitizedClubEstablishment = intent.getStringExtra("SanitizedClubEstablishment")
         val sanitizedCourtName = intent.getStringExtra("SanitizedCourtName")
         val courtName = intent.getStringExtra("sentThroughCourtName")
