@@ -36,9 +36,9 @@ class CourtListActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = CourtAdapter { sanitizedCourtName ->
+        adapter = CourtAdapter { sentThroughCourtName ->
             // Handle item click, and navigate to AccountActivity
-            navigateToAccountActivity(sanitizedCourtName)
+            navigateToAccountActivity(sentThroughCourtName)
         }
         recyclerView.adapter = adapter
 
@@ -65,7 +65,6 @@ class CourtListActivity : AppCompatActivity() {
 
                 for (document in documents) {
                     val courtName = document.getString("CourtName") ?: ""
-                    sentThroughCourtName = document.getString("CourtName") ?: ""  // New line
                     Log.d("CourtListActivity", "3) Fetch?: $courtName")
                     adapter.addData(courtName)
                 }
@@ -78,7 +77,7 @@ class CourtListActivity : AppCompatActivity() {
 
 
 
-    private fun navigateToAccountActivity(sanitizedCourtName: String) {
+    private fun navigateToAccountActivity(sentThroughCourtName: String) {
         // Create an explicit intent to navigate to AccountActivity
         val sanitizedCourtName = sentThroughCourtName.replace("[\\s,\\\\/]".toRegex(), "")
         Log.d("CourtListActivity", "The right stuff sent? $sentThroughCourtName, $sanitizedCourtName")
