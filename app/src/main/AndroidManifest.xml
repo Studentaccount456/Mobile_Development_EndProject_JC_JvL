@@ -142,39 +142,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activitiesDirectory.TesterActivity_Time"
-            android:exported="true"
-            android:label="Padelero"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activitiesDirectory.TesterActivity_Date"
-            android:exported="true"
-            android:label="Padelero"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activitiesDirectory.TesterActivity_FireStore"
-            android:exported="true"
-            android:label="Padelero"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Mobile_Dev_EndProject_JC_JvL">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
