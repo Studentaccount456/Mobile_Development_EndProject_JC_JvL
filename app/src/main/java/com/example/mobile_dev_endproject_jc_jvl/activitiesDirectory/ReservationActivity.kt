@@ -2,6 +2,7 @@ package com.example.mobile_dev_endproject_jc_jvl.activitiesDirectory
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat
 import com.example.mobile_dev_endproject_jc_jvl.R
 import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.MatchReservation
 import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.PlayerReservation
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -54,6 +56,34 @@ class ReservationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reservation_screen)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // Right Icon active
+        bottomNavigationView.menu.findItem(R.id.navigation_establishment).isChecked = true
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    launchActivity(HomeActivity::class.java)
+                    true
+                }
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
+                    true
+                }
+                R.id.navigation_match -> {
+                    launchActivity(MatchActivity::class.java)
+                    true
+                }
+                R.id.navigation_account -> {
+                    item.isChecked = true
+                    launchActivity(AccountActivity::class.java)
+                    true
+                }
+                else -> false
+            }
+        }
 
         sentThroughEstablishment = intent.getStringExtra("sentThroughClubEstablishment").toString()
         sentThroughCourtName = intent.getStringExtra("sentThroughCourtName").toString()
@@ -684,6 +714,11 @@ private fun calculateReservedEndTime(selectedTime: String): String {
     private fun sanitizeUsername(username: String?): String {
         // Remove symbols "/" "\", and " "
         return username?.replace("[/\\\\ ]".toRegex(), "") ?: ""
+    }
+
+    private fun launchActivity(cls: Class<*>) {
+        val intent = Intent(this, cls)
+        startActivity(intent)
     }
 
 }

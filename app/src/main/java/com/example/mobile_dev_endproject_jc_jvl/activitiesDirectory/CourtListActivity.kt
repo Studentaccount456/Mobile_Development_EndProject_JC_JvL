@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile_dev_endproject_jc_jvl.R
 import com.example.mobile_dev_endproject_jc_jvl.adaptersDirectory.CourtAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CourtListActivity : AppCompatActivity() {
@@ -25,6 +26,34 @@ class CourtListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.courtslist_screen)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // Right Icon active
+        bottomNavigationView.menu.findItem(R.id.navigation_establishment).isChecked = true
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    launchActivity(HomeActivity::class.java)
+                    true
+                }
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
+                    true
+                }
+                R.id.navigation_match -> {
+                    launchActivity(MatchActivity::class.java)
+                    true
+                }
+                R.id.navigation_account -> {
+                    item.isChecked = true
+                    launchActivity(AccountActivity::class.java)
+                    true
+                }
+                else -> false
+            }
+        }
 
         sentThroughEstablishmentAddress = intent.getStringExtra("sentThroughEstablishmentAddress").toString()
 
@@ -92,6 +121,11 @@ class CourtListActivity : AppCompatActivity() {
             putExtra("sentThroughCourtName", sentThroughCourtName)
             putExtra("sentThroughEstablishmentAddress", sentThroughEstablishmentAddress)
         }
+        startActivity(intent)
+    }
+
+    private fun launchActivity(cls: Class<*>) {
+        val intent = Intent(this, cls)
         startActivity(intent)
     }
 }

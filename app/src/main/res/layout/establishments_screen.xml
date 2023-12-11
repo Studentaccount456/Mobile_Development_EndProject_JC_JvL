@@ -21,6 +21,16 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/textViewSelectEstablishment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select establishment to reserve court:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingLeft="32dp"
+        android:paddingTop="16dp"/>
+
     <!-- Your existing RecyclerView for "Establishments" -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewClubEstablishments"
@@ -38,3 +48,4 @@
         app:menu="@menu/bottom_navigation_menu" />
 
 </LinearLayout>
+

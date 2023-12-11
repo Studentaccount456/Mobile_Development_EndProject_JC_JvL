@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile_dev_endproject_jc_jvl.R
 import com.example.mobile_dev_endproject_jc_jvl.adaptersDirectory.MatchAdapter
 import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.Match
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -56,6 +57,34 @@ class MatchActivity : AppCompatActivity() {
 
         // Select the tab you want (e.g., "Your Courts Reservations")
         allMatchesTab.select()
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // Right Icon active
+        bottomNavigationView.menu.findItem(R.id.navigation_match).isChecked = true
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    launchActivity(HomeActivity::class.java)
+                    true
+                }
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
+                    true
+                }
+                R.id.navigation_match -> {
+                    launchActivity(MatchActivity::class.java)
+                    true
+                }
+                R.id.navigation_account -> {
+                    item.isChecked = true
+                    launchActivity(AccountActivity::class.java)
+                    true
+                }
+                else -> false
+            }
+        }
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)

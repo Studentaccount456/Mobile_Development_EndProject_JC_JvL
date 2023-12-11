@@ -8,7 +8,7 @@
     <item
         android:id="@+id/navigation_establishment"
         android:icon="@drawable/ic_field"
-        android:title="Establishment" />
+        android:title="Court" />
 
     <item
         android:id="@+id/navigation_match"
