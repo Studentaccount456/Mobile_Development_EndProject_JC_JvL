@@ -36,6 +36,7 @@ class AccountActivity : AppCompatActivity(){
     private lateinit var genderToPlayAgainstText: TextView
     private lateinit var logoutButton: Button
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private lateinit var userId : String
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -88,8 +89,18 @@ class AccountActivity : AppCompatActivity(){
         genderToPlayAgainstText = findViewById(R.id.genderToPlayAgainstText)
         logoutButton = findViewById(R.id.logoutButton)
 
+        var sentThroughUserId: String = ""
+        Log.d("AccountActivity", "Hello? $sentThroughUserId")
+        sentThroughUserId = intent.getStringExtra("sentThroughUserId") ?: ""
+        Log.d("AccountActivity", "Hello? $sentThroughUserId")
         // Fetch data from Firestore
-        val userId = auth.currentUser?.uid
+        if (sentThroughUserId == "") {
+            userId = auth.currentUser?.uid.toString()
+            Log.d("AccountActivity", "Hello1? $userId")
+        } else {
+            userId = sentThroughUserId
+            Log.d("AccountActivity", "Hello2? $userId")
+        }
         var sanitizedUsername: String? = null
         if (userId != null) {
             val userRef = db.collection("ThePlayers").document(userId)
@@ -228,7 +239,7 @@ class AccountActivity : AppCompatActivity(){
 
         // Upload file to Firebase Storage
         imageRef.putFile(imageUri)
-            .addOnSuccessListener { //taskSnapshot ->
+            .addOnSuccessListener { taskSnapshot ->
                 // Image uploaded successfully
                 // Get the download URL and update the user's profile
                 imageRef.downloadUrl.addOnSuccessListener { uri ->

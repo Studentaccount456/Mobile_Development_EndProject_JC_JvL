@@ -225,18 +225,18 @@ class ReservationActivity : AppCompatActivity() {
                 "MatchId" to matchId,
                 "Timeslot" to timeslot,
                 "Participators" to hashMapOf(
-                    "UserName_One" to usernameOfUserOne,
-                    "UserAvatar_One" to avatarOfUserOne,
-                    "UserId_One" to currentUserId,
-                    "UserName_Two" to "Default",
-                    "UserAvatar_Two" to "Default",
-                    "UserId_Two" to "Default",
-                    "UserName_Three" to "Default",
-                    "UserAvatar_Three" to "Default",
-                    "UserId_Three" to "Default",
-                    "UserName_Four" to "Default",
-                    "UserAvatar_Four" to "Default",
-                    "UserId_Four" to "Default"
+                    "UserName_1" to usernameOfUserOne,
+                    "UserAvatar_1" to avatarOfUserOne,
+                    "UserId_1" to currentUserId,
+                    "UserName_2" to "Default",
+                    "UserAvatar_2" to "Default",
+                    "UserId_2" to "Default",
+                    "UserName_3" to "Default",
+                    "UserAvatar_3" to "Default",
+                    "UserId_3" to "Default",
+                    "UserName_4" to "Default",
+                    "UserAvatar_4" to "Default",
+                    "UserId_4" to "Default"
                 )
             )
 
@@ -326,18 +326,18 @@ class ReservationActivity : AppCompatActivity() {
                     timeslot = timeslot,
                     dateReservation = dateReservation,
                     participators = hashMapOf(
-                        "UserName_One" to usernameOfUserOne,
-                        "UserAvatar_One" to avatarOfUserOne,
-                        "UserId_One" to (currentUserId ?: ""),
-                        "UserName_Two" to "Default",
-                        "UserAvatar_Two" to "Default",
-                        "UserId_Two" to "Default",
-                        "UserName_Three" to "Default",
-                        "UserAvatar_Three" to "Default",
-                        "UserId_Three" to "Default",
-                        "UserName_Four" to "Default",
-                        "UserAvatar_Four" to "Default",
-                        "UserId_Four" to "Default"
+                        "UserName_1" to usernameOfUserOne,
+                        "UserAvatar_1" to avatarOfUserOne,
+                        "UserId_1" to (currentUserId ?: ""),
+                        "UserName_2" to "Default",
+                        "UserAvatar_2" to "Default",
+                        "UserId_2" to "Default",
+                        "UserName_3" to "Default",
+                        "UserAvatar_3" to "Default",
+                        "UserId_3" to "Default",
+                        "UserName_4" to "Default",
+                        "UserAvatar_4" to "Default",
+                        "UserId_4" to "Default"
                     )
                 )
 

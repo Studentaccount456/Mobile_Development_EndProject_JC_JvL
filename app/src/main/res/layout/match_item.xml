@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/match_item.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Row 1 -->
+    <TextView
+        android:id="@+id/textViewClubEstablishmentAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Club Establishment Address"/>
+
+    <!-- Row 2 -->
+    <TextView
+        android:id="@+id/textViewDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date and Time"/>
+
+    <!-- Row 3 (Images) -->
+    <LinearLayout
+        android:id="@+id/linearImages"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+        <!-- Images will be added dynamically -->
+    </LinearLayout>
+
+    <!-- Row 4 (Usernames) -->
+    <LinearLayout
+        android:id="@+id/linearUsernames"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <!-- Usernames will be added dynamically -->
+    </LinearLayout>
+</LinearLayout>
