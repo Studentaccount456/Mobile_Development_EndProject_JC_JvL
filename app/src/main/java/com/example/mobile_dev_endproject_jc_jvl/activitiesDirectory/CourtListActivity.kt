@@ -20,11 +20,13 @@ class CourtListActivity : AppCompatActivity() {
     private lateinit var sanitizedClubEstablishment: String
     private lateinit var sentThroughClubName: String
     private lateinit var sentThroughClubEstablishment: String
-    private lateinit var sentThroughCourtName: String
+    private lateinit var sentThroughEstablishmentAddress : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.courtslist_screen)
+
+        sentThroughEstablishmentAddress = intent.getStringExtra("sentThroughEstablishmentAddress").toString()
 
         // Retrieve sanitized club and establishment names from the intent
         sanitizedClubName = intent.getStringExtra("SanitizedClubName") ?: ""
@@ -88,6 +90,7 @@ class CourtListActivity : AppCompatActivity() {
             putExtra("sentThroughClubName", sentThroughClubName)
             putExtra("sentThroughClubEstablishment", sentThroughClubEstablishment)
             putExtra("sentThroughCourtName", sentThroughCourtName)
+            putExtra("sentThroughEstablishmentAddress", sentThroughEstablishmentAddress)
         }
         startActivity(intent)
     }

@@ -21,10 +21,13 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
     private var sanitizedEstablishmentName: String? = null
     private lateinit var sentThroughClubName: String
     private lateinit var sentThroughClubEstablishment: String
+    private lateinit var sentThroughEstablishmentAddress : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.establishmentdetails_screen)
+
+        sentThroughEstablishmentAddress = intent.getStringExtra("ClubEstablishmentAddress").toString()
 
         firestore = FirebaseFirestore.getInstance()
 
@@ -91,6 +94,7 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
         mapIntent.putExtra("SanitizedClubEstablishment", sanitizedEstablishmentName)
         mapIntent.putExtra("sentThroughClubName", sentThroughClubName)
         mapIntent.putExtra("sentThroughClubEstablishment", sentThroughClubEstablishment)
+        mapIntent.putExtra("sentThroughEstablishmentAddress", sentThroughEstablishmentAddress)
         startActivity(mapIntent)
     }
 

@@ -15,6 +15,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.mobile_dev_endproject_jc_jvl.R
+import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.MatchReservation
+import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.PlayerReservation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -38,7 +40,13 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var timeGrid: LinearLayout
     private var takenTimeSlots = mutableListOf<String>()
     private lateinit var reservedTimeText : TextView
-
+    private var makeMatchCollections: Boolean = false
+    private lateinit var sentThroughEstablishment : String
+    private lateinit var sentThroughCourtName : String
+    private lateinit var sentThroughClubName : String
+    private lateinit var sentThroughEstablishmentAddress : String
+    private lateinit var usernameOfUserOne : String
+    private lateinit var avatarOfUserOne : String
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -46,6 +54,12 @@ class ReservationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reservation_screen)
+
+        sentThroughEstablishment = intent.getStringExtra("sentThroughClubEstablishment").toString()
+        sentThroughCourtName = intent.getStringExtra("sentThroughCourtName").toString()
+        sentThroughClubName = intent.getStringExtra("sentThroughClubName").toString()
+        sentThroughEstablishmentAddress = intent.getStringExtra("sentThroughEstablishmentAddress").toString()
+
 
         establishmentTextView = findViewById(R.id.establishmentTextView)
         courtNameTextView = findViewById(R.id.courtNameTextView)
@@ -75,11 +89,20 @@ class ReservationActivity : AppCompatActivity() {
         orderFieldButton = findViewById(R.id.orderFieldButton)
         returnButton = findViewById(R.id.returnButton)
 
+        // Inside your onCreate method after initializing createMatchCheckBox
+
+        createMatchCheckBox = findViewById(R.id.createMatchCheckBox)
+
+        // Add an OnCheckedChangeListener to createMatchCheckBox
+        createMatchCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            // Set the boolean variable makeMatchCollections based on checkbox state
+            makeMatchCollections = isChecked
+            Log.d("ReservationActivity", "Checkbox: $makeMatchCollections")
+        }
+
         // Retrieve data from the intent and set the text views accordingly
-        val establishment = intent.getStringExtra("sentThroughClubEstablishment")
-        val courtName = intent.getStringExtra("sentThroughCourtName")
-        establishmentTextView.text = establishment
-        courtNameTextView.text = courtName
+        establishmentTextView.text = sentThroughEstablishment
+        courtNameTextView.text = sentThroughCourtName
 
         // Set up the time grid
         val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -171,61 +194,39 @@ class ReservationActivity : AppCompatActivity() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val currentUserId = currentUser?.uid
 
-        // Firestore reference to the user's profile details
-        val userProfileRef = currentUserId?.let {
-            firestore.collection("ThePlayers").document(it)
-                .collection("TheProfileDetails").document()
-        }
+        fetchUserNameandAvatarFireStore { usernameOfUserOne, avatarOfUserOne ->
 
-        val sanitizedClubEstablishment = intent.getStringExtra("SanitizedClubEstablishment")
-        val sanitizedCourtName = intent.getStringExtra("SanitizedCourtName")
-        val courtName = intent.getStringExtra("sentThroughCourtName")
-        val sanitizedClubName = intent.getStringExtra("SanitizedClubName")
+            val sanitizedClubEstablishment = intent.getStringExtra("SanitizedClubEstablishment")
+            val sanitizedCourtName = intent.getStringExtra("SanitizedCourtName")
+            val courtName = intent.getStringExtra("sentThroughCourtName")
+            val sanitizedClubName = intent.getStringExtra("SanitizedClubName")
 
-        val yearForFirestore = yearReservation
-        val monthForFirestore = monthReservation
-        val dayForFirestore = dayReservation
+            val yearForFirestore = yearReservation
+            val monthForFirestore = monthReservation
+            val dayForFirestore = dayReservation
 
-        val startTimeForFireStoreInsert = startingTimePlay
-        val endTimeForFireStoreInsert = endingTimePlay
+            val startTimeForFireStoreInsert = startingTimePlay
+            val endTimeForFireStoreInsert = endingTimePlay
 
-        val dateReservation = "$yearForFirestore-$monthForFirestore-$dayForFirestore"
-        val dateReservationSanitized = formatDate(yearForFirestore, monthForFirestore, dayForFirestore)
-        val timeslot = "$startTimeForFireStoreInsert-$endTimeForFireStoreInsert"
-        val sanitizedStartTimeMoment = startTimeForFireStoreInsert.replace(":", "")
-        val sanitizedEndTimeMoment = endTimeForFireStoreInsert.replace(":", "")
-        val sanitizedTimeslot = "$sanitizedStartTimeMoment$sanitizedEndTimeMoment"
+            val dateReservation = "$yearForFirestore-$monthForFirestore-$dayForFirestore"
+            val dateReservationSanitized =
+                formatDate(yearForFirestore, monthForFirestore, dayForFirestore)
+            val timeslot = "$startTimeForFireStoreInsert-$endTimeForFireStoreInsert"
+            val sanitizedStartTimeMoment = startTimeForFireStoreInsert.replace(":", "")
+            val sanitizedEndTimeMoment = endTimeForFireStoreInsert.replace(":", "")
+            val sanitizedTimeslot = "$sanitizedStartTimeMoment$sanitizedEndTimeMoment"
 
-        // unique MatchId: Courtname_year_month_day_hour-begin_hour-end
-        val matchId = "$courtName$dateReservationSanitized$sanitizedTimeslot"
+            // unique MatchId: Courtname_year_month_day_hour-begin_hour-end
+            val matchId = "$courtName$dateReservationSanitized$sanitizedTimeslot"
 
-
-        var username = "Default"
-        var avatar = "Default"
-        // Retrieve user's profile details from Firestore
-        userProfileRef?.get()?.addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists()) {
-                // User profile details exist, update reservationData with retrieved values
-                username = documentSnapshot.getString("Username") ?: "Default"
-                avatar = documentSnapshot.getString("Avatar") ?: "Default"
-
-            } else {
-                // User profile details do not exist, handle accordingly
-                Log.e("ReservationActivity", "User profile details not found for ID: $currentUserId")
-            }
-        }?.addOnFailureListener { e ->
-            // Handle failure
-            Log.e("ReservationActivity", "Error getting user profile details", e)
-        }
-
-        // Sample data with default values (initially set to default)
-        val reservationData = hashMapOf(
+            // Sample data with default values (initially set to default)
+            val reservationData = hashMapOf(
                 "DateReservation" to dateReservation,
                 "MatchId" to matchId,
                 "Timeslot" to timeslot,
                 "Participators" to hashMapOf(
-                    "UserName_One" to username,
-                    "UserAvatar_One" to avatar,
+                    "UserName_One" to usernameOfUserOne,
+                    "UserAvatar_One" to avatarOfUserOne,
                     "UserId_One" to currentUserId,
                     "UserName_Two" to "Default",
                     "UserAvatar_Two" to "Default",
@@ -240,42 +241,122 @@ class ReservationActivity : AppCompatActivity() {
             )
 
 
-        Log.d("ReservationActivity", "Data: $dateReservationSanitized, $matchId, $timeslot")
-        Log.d("ReservationActivity", "Data: $sanitizedClubName, $sanitizedClubEstablishment, $sanitizedCourtName")
+            Log.d("ReservationActivity", "Data: $dateReservationSanitized, $matchId, $timeslot")
+            Log.d(
+                "ReservationActivity",
+                "Data: $sanitizedClubName, $sanitizedClubEstablishment, $sanitizedCourtName"
+            )
 
-        // Update Firestore with the reservation data
-        if (sanitizedClubName != null && sanitizedClubEstablishment != null && sanitizedCourtName != null) {
-            val courtDocument = firestore.collection("TheClubDetails")
-                .document(sanitizedClubName)
-                .collection("TheClubEstablishments")
-                .document(sanitizedClubEstablishment)
-                .collection("TheClubCourts")
-                .document(sanitizedCourtName)
+            // Update Firestore with the reservation data
+            if (sanitizedClubName != null && sanitizedClubEstablishment != null && sanitizedCourtName != null) {
+                val courtDocument = firestore.collection("TheClubDetails")
+                    .document(sanitizedClubName)
+                    .collection("TheClubEstablishments")
+                    .document(sanitizedClubEstablishment)
+                    .collection("TheClubCourts")
+                    .document(sanitizedCourtName)
 
-            // Check if the "CourtReservations" field exists
-            // Check if the "CourtReservations" field exists
-            courtDocument.get().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val documentSnapshot = task.result
-                    val existingReservations = documentSnapshot?.get("CourtReservations") as? HashMap<String, Any> ?: hashMapOf()
+                // Check if the "CourtReservations" field exists
+                courtDocument.get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val documentSnapshot = task.result
+                        val existingReservations =
+                            documentSnapshot?.get("CourtReservations") as? HashMap<String, Any>
+                                ?: hashMapOf()
 
-                    // Create or update the "DateReservation" entry with a list of reservations
-                    val dateReservationData = existingReservations[dateReservation] as? ArrayList<HashMap<String, Any>> ?: arrayListOf()
-                    val reservationDataJava = reservationData as HashMap<String, Any>
-                    dateReservationData.add(reservationDataJava)
-                    existingReservations[dateReservation] = dateReservationData
+                        // Create or update the "DateReservation" entry with a list of reservations
+                        val dateReservationData =
+                            existingReservations[dateReservation] as? ArrayList<HashMap<String, Any>>
+                                ?: arrayListOf()
+                        val reservationDataJava = reservationData as HashMap<String, Any>
+                        dateReservationData.add(reservationDataJava)
+                        existingReservations[dateReservation] = dateReservationData
 
-                    // Update "CourtReservations" field
-                    courtDocument.update("CourtReservations", existingReservations)
-                        .addOnSuccessListener {
-                            Log.d("ReservationActivity", "Yeey the update was successful")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e("ReservationActivity", "Update failed", e)
-                        }
-                } else {
-                    Log.e("ReservationActivity", "Document check failed", task.exception)
+                        // Update "CourtReservations" field
+                        courtDocument.update("CourtReservations", existingReservations)
+                            .addOnSuccessListener {
+                                Log.d("ReservationActivity", "Yeey the update was successful")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("ReservationActivity", "Update failed", e)
+                            }
+                    } else {
+                        Log.e("ReservationActivity", "Document check failed", task.exception)
+                    }
                 }
+            }
+
+            // Replace these variables with actual values
+            val playerReservation = PlayerReservation(
+                clubName = sentThroughClubName,
+                clubEstablishmentName = sentThroughEstablishment,
+                courtName = sentThroughCourtName,
+                matchId = matchId,
+                clubEstablishmentAddress = sentThroughEstablishmentAddress,
+                timeslot = timeslot,
+                dateReservation = dateReservation
+            )
+
+            val db = FirebaseFirestore.getInstance()
+
+            // Reference to the document in the sub-collection
+            val documentReference =
+                db.collection("ThePlayers/$currentUserId/ThePlayerReservationsCourts")
+                    .document(matchId)
+
+            // Add data to Firestore
+            documentReference.set(playerReservation)
+                .addOnSuccessListener {
+                    // Successfully added data
+                    // Handle success as needed
+                }
+                .addOnFailureListener { e ->
+                    // Handle error
+                    // e.g., Log.e("TAG", "Error adding document", e)
+                }
+
+            if (makeMatchCollections) {
+                // Replace these variables with actual values
+                val matchReservation = MatchReservation(
+                    clubName = sentThroughClubName,
+                    clubEstablishmentName = sentThroughEstablishment,
+                    courtName = sentThroughCourtName,
+                    matchId = matchId,
+                    clubEstablishmentAddress = sentThroughEstablishmentAddress,
+                    timeslot = timeslot,
+                    dateReservation = dateReservation,
+                    participators = hashMapOf(
+                        "UserName_One" to usernameOfUserOne,
+                        "UserAvatar_One" to avatarOfUserOne,
+                        "UserId_One" to (currentUserId ?: ""),
+                        "UserName_Two" to "Default",
+                        "UserAvatar_Two" to "Default",
+                        "UserId_Two" to "Default",
+                        "UserName_Three" to "Default",
+                        "UserAvatar_Three" to "Default",
+                        "UserId_Three" to "Default",
+                        "UserName_Four" to "Default",
+                        "UserAvatar_Four" to "Default",
+                        "UserId_Four" to "Default"
+                    )
+                )
+
+                val db = FirebaseFirestore.getInstance()
+
+                // Reference to the document in the sub-collection
+                val documentReference = db.collection("TheMatches")
+                    .document(matchId)
+
+                // Add data to Firestore
+                documentReference.set(matchReservation)
+                    .addOnSuccessListener {
+                        // Successfully added data
+                        // Handle success as needed
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle error
+                        // e.g., Log.e("TAG", "Error adding document", e)
+                    }
             }
         }
     }
@@ -541,6 +622,68 @@ private fun calculateReservedEndTime(selectedTime: String): String {
         reservedTimeText.text = "" // Set reservedTimeText to an empty string
         startingTimePlay = ""
         endingTimePlay = ""
+    }
+
+    private fun fetchUserNameandAvatarFireStore(callback: (String, String) -> Unit) {
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUserId = currentUser?.uid
+
+        val db = FirebaseFirestore.getInstance()
+
+        val userReference = currentUserId?.let {
+            db.collection("ThePlayers")
+                .document(it)
+        }
+
+        // Fetch the username from the user's document
+        userReference?.get()?.addOnSuccessListener { userDocumentSnapshot ->
+            if (userDocumentSnapshot.exists()) {
+                // User document exists, extract the username
+                val username = userDocumentSnapshot.getString("username")
+
+                // Sanitize the username and use it in the sub-collection reference
+                val sanitizedUsername = sanitizeUsername(username)
+
+                // Reference to the user's profile details document
+                val profileDetailsReference = db.collection("ThePlayers")
+                    .document(currentUserId)
+                    .collection("TheProfileDetails")
+                    .document(sanitizedUsername)
+
+                // Fetch data from Firestore
+                profileDetailsReference.get()
+                    .addOnSuccessListener { profileDetailsSnapshot ->
+                        if (profileDetailsSnapshot.exists()) {
+                            // Document exists, extract Avatar and Username
+                            avatarOfUserOne = profileDetailsSnapshot.getString("Avatar").toString()
+                            usernameOfUserOne = profileDetailsSnapshot.getString("Username").toString()
+                            callback(usernameOfUserOne, avatarOfUserOne)
+
+                            Log.d("ReservationActivity", "avatar: $usernameOfUserOne, $avatarOfUserOne")
+                        } else {
+                            // Document does not exist
+                            Log.d("ReservationActivity","Profile details not found for the user.")
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle errors
+                        Log.d("ReservationActivity","Error fetching profile details: $e")
+                    }
+            } else {
+                // User document does not exist
+                Log.d("ReservationActivity","User not found.")
+            }
+        }?.addOnFailureListener { e ->
+            // Handle errors
+            Log.d("ReservationActivity","Error fetching user data: $e")
+        }
+    }
+
+    // Helper function to sanitize the username
+    private fun sanitizeUsername(username: String?): String {
+        // Remove symbols "/" "\", and " "
+        return username?.replace("[/\\\\ ]".toRegex(), "") ?: ""
     }
 
 }
