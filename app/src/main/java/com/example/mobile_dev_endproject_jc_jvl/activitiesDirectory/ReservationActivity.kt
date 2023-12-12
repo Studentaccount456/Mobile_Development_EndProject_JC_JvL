@@ -53,7 +53,7 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var avatarOfUserOne: String
     private lateinit var typeOfMatchSpinner: Spinner
     private lateinit var gendersAllowedSpinner: Spinner
-    private lateinit var genderOfPlayer : String
+    private lateinit var genderOfPlayer: String
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -176,7 +176,8 @@ class ReservationActivity : AppCompatActivity() {
                         else -> arrayOf("Male", "Either") // Default to first option for other cases
                     }
                 }
-                val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genderOptions)
+                val genderAdapter =
+                    ArrayAdapter(this, android.R.layout.simple_spinner_item, genderOptions)
                 gendersAllowedSpinner.adapter = genderAdapter
 
                 // Set the default selection based on fetched gender

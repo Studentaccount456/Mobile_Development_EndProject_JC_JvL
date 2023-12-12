@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobile_dev_endproject_jc_jvl.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -31,6 +32,38 @@ class JoinMatchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.joinmatch_screen)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // Right Icon active
+        bottomNavigationView.menu.findItem(R.id.navigation_match).isChecked = true
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    launchActivity(HomeActivity::class.java)
+                    true
+                }
+
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
+                    true
+                }
+
+                R.id.navigation_match -> {
+                    launchActivity(MatchActivity::class.java)
+                    true
+                }
+
+                R.id.navigation_account -> {
+                    item.isChecked = true
+                    launchActivity(AccountActivity::class.java)
+                    true
+                }
+
+                else -> false
+            }
+        }
 
         dateReservationTextView = findViewById(R.id.dateReservationTextView)
         timeslotTextView = findViewById(R.id.timeslotTextView)
@@ -153,11 +186,82 @@ class JoinMatchActivity : AppCompatActivity() {
                                     }
                                 }
                             }
+
+                            val sentThroughClubName =
+                                intent.getStringExtra("sentThroughClubName") ?: ""
+                            val sentThroughClubEstablishmentName =
+                                intent.getStringExtra("sentThroughClubEstablishmentName") ?: ""
+                            val sentThroughCourtName =
+                                intent.getStringExtra("sentThroughCourtName") ?: ""
+                            val dateReservation = intent.getStringExtra("dateReservation")
+                            val matchId = intent.getStringExtra("matchId")
+                            positionSquare = intent.getStringExtra("PositionSquare") ?: ""
+
+
+                            val db = FirebaseFirestore.getInstance()
+
+                            // Reference to the document in the sub-collection
+                            val documentReference =
+                                db.collection("TheClubDetails/$sentThroughClubName/TheClubEstablishments/$sentThroughClubEstablishmentName/TheClubCourts")
+                                    .document(sentThroughCourtName)
+
+                            documentReference.get()
+                                .addOnSuccessListener { documentSnapshot ->
+                                    if (documentSnapshot.exists()) {
+                                        // Get CourtReservations map
+                                        val courtReservations =
+                                            documentSnapshot.get("CourtReservations") as? Map<*, *>
+                                        if (courtReservations != null) {
+                                            // Get the specific array object based on dateReservation
+                                            val reservationsArray =
+                                                courtReservations[dateReservation] as? List<*>
+                                            if (reservationsArray != null) {
+                                                // Find the object with matching matchId
+                                                val matchingReservation = reservationsArray.find {
+                                                    (it as? Map<*, *>)?.get("MatchId") == matchId
+                                                }
+
+                                                if (matchingReservation != null) {
+                                                    // Get the Participators map
+                                                    val participators =
+                                                        (matchingReservation as Map<*, *>)["Participators"] as? MutableMap<String, Any>
+
+                                                    // Update values based on positionSquare
+                                                    participators?.let {
+                                                        it["UserName_$positionSquare"] = username
+                                                        it["UserAvatar_$positionSquare"] = avatar
+                                                        it["UserId_$positionSquare"] = userId
+
+                                                        // Update the Participators map in Firestore
+                                                        documentReference.update(
+                                                            "CourtReservations.$dateReservation",
+                                                            reservationsArray
+                                                        )
+                                                            .addOnSuccessListener {
+                                                                // Successfully updated Firestore
+                                                            }
+                                                            .addOnFailureListener { e ->
+                                                                // Handle failure
+                                                            }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle failure
+                                }
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun launchActivity(cls: Class<*>) {
+        val intent = Intent(this, cls)
+        startActivity(intent)
     }
 
     private fun sanitizeUsername(username: String): String {

@@ -104,6 +104,19 @@ class MatchAdapter(private val matches: List<Match>) :
                     intent.putExtra("matchId", match.matchId)
                     intent.putExtra("typeOfMatch", match.typeOfMatch)
                     intent.putExtra("gendersAllowed", match.gendersAllowed)
+
+                    val sentThroughClubName = sanitizeForFirestore(match.clubName)
+                    val sentThroughClubEstablishmentName =
+                        sanitizeForFirestore(match.clubEstablishmentName)
+                    val sentThroughCourtName = sanitizeForFirestore(match.courtName)
+
+                    intent.putExtra("sentThroughClubName", sentThroughClubName)
+                    intent.putExtra(
+                        "sentThroughClubEstablishmentName",
+                        sentThroughClubEstablishmentName
+                    )
+                    intent.putExtra("sentThroughCourtName", sentThroughCourtName)
+
                     // Pass any necessary data to JoinMatchActivity using intent.putExtra if needed
                     holder.itemView.context.startActivity(intent)
                 } else {
@@ -158,5 +171,11 @@ class MatchAdapter(private val matches: List<Match>) :
 
     override fun getItemCount(): Int {
         return matches.size
+    }
+
+    private fun sanitizeForFirestore(username: String): String {
+        // Implement your logic to sanitize the username (remove spaces or special characters)
+        // For example, you can replace spaces with underscores
+        return username.replace("\\s+".toRegex(), "")
     }
 }
