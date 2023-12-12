@@ -59,19 +59,23 @@ class MapActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }
@@ -84,7 +88,8 @@ class MapActivity : AppCompatActivity() {
 
         fetchClubsFromFirebase()
 
-        val myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(applicationContext), mapView)
+        val myLocationOverlay =
+            MyLocationNewOverlay(GpsMyLocationProvider(applicationContext), mapView)
         myLocationOverlay.enableMyLocation()
         mapView.overlays.add(myLocationOverlay)
 
@@ -153,22 +158,33 @@ class MapActivity : AppCompatActivity() {
                 for (document in result) {
                     val clubName = document.id
 
-                    firestore.collection("TheClubDetails").document(clubName).collection("TheClubEstablishments")
+                    firestore.collection("TheClubDetails").document(clubName)
+                        .collection("TheClubEstablishments")
                         .get()
                         .addOnSuccessListener { establishmentResult ->
                             for (establishmentDocument in establishmentResult) {
-                                val clubEstablishmentName = establishmentDocument.getString("ClubEstablishmentName")
-                                val clubEstablishmentAddress = establishmentDocument.getString("ClubEstablishmentAddress")
-                                val clubEstablishmentLocation = establishmentDocument.getGeoPoint("ClubEstablishmentLocation")
+                                val clubEstablishmentName =
+                                    establishmentDocument.getString("ClubEstablishmentName")
+                                val clubEstablishmentAddress =
+                                    establishmentDocument.getString("ClubEstablishmentAddress")
+                                val clubEstablishmentLocation =
+                                    establishmentDocument.getGeoPoint("ClubEstablishmentLocation")
 
                                 if (clubEstablishmentName != null && clubEstablishmentLocation != null) {
                                     val clubMarker = CustomOverlayItem(
                                         clubEstablishmentName,
                                         "Club Location",
-                                        createGeoPoint(clubEstablishmentLocation.latitude, clubEstablishmentLocation.longitude)
+                                        createGeoPoint(
+                                            clubEstablishmentLocation.latitude,
+                                            clubEstablishmentLocation.longitude
+                                        )
                                     )
                                     // Attach extra values
-                                    clubMarker.extraData = createMarkerExtrasData(clubName, clubEstablishmentAddress, clubEstablishmentName)
+                                    clubMarker.extraData = createMarkerExtrasData(
+                                        clubName,
+                                        clubEstablishmentAddress,
+                                        clubEstablishmentName
+                                    )
 
                                     val clubMarkerOverlay = ItemizedIconOverlay<OverlayItem>(
                                         applicationContext,
@@ -182,7 +198,10 @@ class MapActivity : AppCompatActivity() {
                             mapView.invalidate()
                         }
                         .addOnFailureListener { exception ->
-                            Log.e("MapActivity", "Error fetching establishments from Firebase: $exception")
+                            Log.e(
+                                "MapActivity",
+                                "Error fetching establishments from Firebase: $exception"
+                            )
                         }
                 }
             }
@@ -246,7 +265,11 @@ class MapActivity : AppCompatActivity() {
         mapView.controller.setCenter(geopoint)
     }
 
-    private fun createMarkerExtrasData(clubName: String, establishmentAddress: String?, establishmentName: String?): HashMap<String, String?> {
+    private fun createMarkerExtrasData(
+        clubName: String,
+        establishmentAddress: String?,
+        establishmentName: String?
+    ): HashMap<String, String?> {
         val extrasData = HashMap<String, String?>()
         extrasData["ClubName"] = clubName
         extrasData["ClubEstablishmentAddress"] = establishmentAddress

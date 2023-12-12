@@ -41,14 +41,14 @@ class ReservationActivity : AppCompatActivity() {
     private var dayReservation: Int = 0
     private lateinit var timeGrid: LinearLayout
     private var takenTimeSlots = mutableListOf<String>()
-    private lateinit var reservedTimeText : TextView
+    private lateinit var reservedTimeText: TextView
     private var makeMatchCollections: Boolean = false
-    private lateinit var sentThroughEstablishment : String
-    private lateinit var sentThroughCourtName : String
-    private lateinit var sentThroughClubName : String
-    private lateinit var sentThroughEstablishmentAddress : String
-    private lateinit var usernameOfUserOne : String
-    private lateinit var avatarOfUserOne : String
+    private lateinit var sentThroughEstablishment: String
+    private lateinit var sentThroughCourtName: String
+    private lateinit var sentThroughClubName: String
+    private lateinit var sentThroughEstablishmentAddress: String
+    private lateinit var usernameOfUserOne: String
+    private lateinit var avatarOfUserOne: String
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -68,19 +68,23 @@ class ReservationActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }
@@ -88,7 +92,8 @@ class ReservationActivity : AppCompatActivity() {
         sentThroughEstablishment = intent.getStringExtra("sentThroughClubEstablishment").toString()
         sentThroughCourtName = intent.getStringExtra("sentThroughCourtName").toString()
         sentThroughClubName = intent.getStringExtra("sentThroughClubName").toString()
-        sentThroughEstablishmentAddress = intent.getStringExtra("sentThroughEstablishmentAddress").toString()
+        sentThroughEstablishmentAddress =
+            intent.getStringExtra("sentThroughEstablishmentAddress").toString()
 
 
         establishmentTextView = findViewById(R.id.establishmentTextView)
@@ -164,7 +169,12 @@ class ReservationActivity : AppCompatActivity() {
                 timeSquare.tag = startTime
                 timeSquare.gravity = Gravity.CENTER
                 timeSquare.setBackgroundResource(R.drawable.selector_time_square)
-                timeSquare.setTextColor(ContextCompat.getColorStateList(this, R.color.text_color)) // Add this line
+                timeSquare.setTextColor(
+                    ContextCompat.getColorStateList(
+                        this,
+                        R.color.text_color
+                    )
+                ) // Add this line
                 timeSquare.setOnClickListener { view ->
                     // Clear the selection of all other time squares
                     if (timeSquare.tag != "disabled") {
@@ -199,13 +209,21 @@ class ReservationActivity : AppCompatActivity() {
                 // You can display a toast, dialog, or any other suitable UI element to notify the user
                 // For example, using a Toast:
                 findViewById<View>(R.id.redBorder).visibility = View.VISIBLE
-                Toast.makeText(this, "Please select a time slot before ordering the field", Toast.LENGTH_SHORT).show()
-            } else if (takenTimeSlots.any { it.contains(startingTimePlay) || it.contains(endingTimePlay) }) {
+                Toast.makeText(
+                    this,
+                    "Please select a time slot before ordering the field",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (takenTimeSlots.any {
+                    it.contains(startingTimePlay) || it.contains(
+                        endingTimePlay
+                    )
+                }) {
                 findViewById<View>(R.id.redBorder).visibility = View.VISIBLE
-                Toast.makeText(this, "Times overlap! Can't make reservation!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Times overlap! Can't make reservation!", Toast.LENGTH_SHORT)
+                    .show()
 
-            }
-            else {
+            } else {
                 findViewById<View>(R.id.redBorder).visibility = View.GONE
                 orderField()
             }
@@ -399,29 +417,30 @@ class ReservationActivity : AppCompatActivity() {
         return dateFormat.format(calendar.time)
     }
 
-// Function to clear the selection of all time squares in the grid
-private fun clearSelection(parentLayout: LinearLayout) {
-    for (i in 0 until parentLayout.childCount) {
-        val rowLayout = parentLayout.getChildAt(i) as LinearLayout
-        for (j in 0 until rowLayout.childCount) {
-            val timeSquare = rowLayout.getChildAt(j) as TextView
-            timeSquare.isSelected = false
+    // Function to clear the selection of all time squares in the grid
+    private fun clearSelection(parentLayout: LinearLayout) {
+        for (i in 0 until parentLayout.childCount) {
+            val rowLayout = parentLayout.getChildAt(i) as LinearLayout
+            for (j in 0 until rowLayout.childCount) {
+                val timeSquare = rowLayout.getChildAt(j) as TextView
+                timeSquare.isSelected = false
+            }
         }
     }
-}
 
-private fun calculateReservedEndTime(selectedTime: String): String {
-    val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-    val calendar = Calendar.getInstance()
+    private fun calculateReservedEndTime(selectedTime: String): String {
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val calendar = Calendar.getInstance()
 
-    val startTime = sdf.parse(selectedTime)
-    if (startTime != null) {
-        calendar.time = startTime
+        val startTime = sdf.parse(selectedTime)
+        if (startTime != null) {
+            calendar.time = startTime
+        }
+        calendar.add(Calendar.MINUTE, 90)
+
+        return sdf.format(calendar.time)
     }
-    calendar.add(Calendar.MINUTE, 90)
 
-    return sdf.format(calendar.time)
-}
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_MONTH, 1)
@@ -497,7 +516,8 @@ private fun calculateReservedEndTime(selectedTime: String): String {
                     Log.d("ReservationActivity", "0) Fetch Successful $courtReservations")
 
                     // Check if DetailsReservation exists
-                    val detailsReservations = courtReservations?.get(dateToFetchLeTimeSlots) as? List<Map<*, *>>
+                    val detailsReservations =
+                        courtReservations?.get(dateToFetchLeTimeSlots) as? List<Map<*, *>>
                     Log.d("ReservationActivity", "0.1) Fetch Successful $detailsReservations")
 
                     // Iterate over the entries in the DetailsReservations list
@@ -525,7 +545,7 @@ private fun calculateReservedEndTime(selectedTime: String): String {
             }
     }
 
-    private fun fetchReservedTimeSlots(dateToFetchLeTimeSlots : String) {
+    private fun fetchReservedTimeSlots(dateToFetchLeTimeSlots: String) {
         val sanitizedClubName = intent.getStringExtra("SanitizedClubName")
         val sanitizedClubEstablishment = intent.getStringExtra("SanitizedClubEstablishment")
         val sanitizedCourtName = intent.getStringExtra("SanitizedCourtName")
@@ -533,7 +553,10 @@ private fun calculateReservedEndTime(selectedTime: String): String {
         if (sanitizedClubName != null) {
             if (sanitizedClubEstablishment != null) {
                 if (sanitizedCourtName != null) {
-                    fetchTimeSlots(sanitizedClubName, sanitizedClubEstablishment, sanitizedCourtName, dateToFetchLeTimeSlots,
+                    fetchTimeSlots(sanitizedClubName,
+                        sanitizedClubEstablishment,
+                        sanitizedCourtName,
+                        dateToFetchLeTimeSlots,
                         onTimeSlotsFetched = { reservedTimeSlots ->
                             Log.d("ReservationActivity", "3) reservedTimeSlots: $reservedTimeSlots")
                             updateReservedTimeSlotsUI(reservedTimeSlots)
@@ -563,7 +586,10 @@ private fun calculateReservedEndTime(selectedTime: String): String {
         }
     }
 
-    private fun disableReservedTimeSlots(parentLayout: LinearLayout, reservedTimeSlots: List<String>) {
+    private fun disableReservedTimeSlots(
+        parentLayout: LinearLayout,
+        reservedTimeSlots: List<String>
+    ) {
         val updatedReservedTimeSlots = mutableListOf<String>()
         Log.d("ReservationActivity", "before Show list:$reservedTimeSlots")
 
@@ -687,26 +713,30 @@ private fun calculateReservedEndTime(selectedTime: String): String {
                         if (profileDetailsSnapshot.exists()) {
                             // Document exists, extract Avatar and Username
                             avatarOfUserOne = profileDetailsSnapshot.getString("Avatar").toString()
-                            usernameOfUserOne = profileDetailsSnapshot.getString("Username").toString()
+                            usernameOfUserOne =
+                                profileDetailsSnapshot.getString("Username").toString()
                             callback(usernameOfUserOne, avatarOfUserOne)
 
-                            Log.d("ReservationActivity", "avatar: $usernameOfUserOne, $avatarOfUserOne")
+                            Log.d(
+                                "ReservationActivity",
+                                "avatar: $usernameOfUserOne, $avatarOfUserOne"
+                            )
                         } else {
                             // Document does not exist
-                            Log.d("ReservationActivity","Profile details not found for the user.")
+                            Log.d("ReservationActivity", "Profile details not found for the user.")
                         }
                     }
                     .addOnFailureListener { e ->
                         // Handle errors
-                        Log.d("ReservationActivity","Error fetching profile details: $e")
+                        Log.d("ReservationActivity", "Error fetching profile details: $e")
                     }
             } else {
                 // User document does not exist
-                Log.d("ReservationActivity","User not found.")
+                Log.d("ReservationActivity", "User not found.")
             }
         }?.addOnFailureListener { e ->
             // Handle errors
-            Log.d("ReservationActivity","Error fetching user data: $e")
+            Log.d("ReservationActivity", "Error fetching user data: $e")
         }
     }
 

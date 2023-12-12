@@ -84,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
                 passwordEditText.setBackgroundResource(R.drawable.edit_text_error_border)
             }
     }
+
     private fun showSnackbar(message: String) {
         // Assuming your root view is a CoordinatorLayout, replace it with the appropriate view type if needed
         val rootView = findViewById<View>(android.R.id.content)

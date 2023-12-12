@@ -15,9 +15,9 @@
             android:id="@+id/tabLayout_Establishments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
+            android:background="@android:color/white"
             app:tabGravity="fill"
-            android:background="@android:color/white" />
+            app:tabMode="fixed" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -25,11 +25,11 @@
         android:id="@+id/textViewSelectEstablishment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="32dp"
+        android:paddingTop="16dp"
         android:text="Select establishment to reserve court:"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingLeft="32dp"
-        android:paddingTop="16dp"/>
+        android:textStyle="bold" />
 
     <!-- Your existing RecyclerView for "Establishments" -->
     <androidx.recyclerview.widget.RecyclerView

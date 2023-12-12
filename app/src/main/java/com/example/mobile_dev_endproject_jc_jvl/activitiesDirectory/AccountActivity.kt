@@ -19,7 +19,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.mobile_dev_endproject_jc_jvl.R
 
-class AccountActivity : AppCompatActivity(){
+class AccountActivity : AppCompatActivity() {
 
     private lateinit var profileImage: ImageView
     private lateinit var usernameText: TextView
@@ -36,7 +36,7 @@ class AccountActivity : AppCompatActivity(){
     private lateinit var genderToPlayAgainstText: TextView
     private lateinit var logoutButton: Button
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
-    private lateinit var userId : String
+    private lateinit var userId: String
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -56,19 +56,23 @@ class AccountActivity : AppCompatActivity(){
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     launchActivity(AccountActivity::class.java)
 
                     true
                 }
+
                 else -> false
             }
         }
@@ -115,9 +119,12 @@ class AccountActivity : AppCompatActivity(){
 
                             if (profileDetailsData != null) {
                                 // Extract fields
-                                val levelInformation = profileDetailsData["Level"]?.toString()?.toInt()
-                                val followersInformation = profileDetailsData["Followers"]?.toString()?.toInt()
-                                val followingInformation = profileDetailsData["Following"]?.toString()?.toInt()
+                                val levelInformation =
+                                    profileDetailsData["Level"]?.toString()?.toInt()
+                                val followersInformation =
+                                    profileDetailsData["Followers"]?.toString()?.toInt()
+                                val followingInformation =
+                                    profileDetailsData["Following"]?.toString()?.toInt()
                                 val avatarUrl = profileDetailsData["Avatar"] as? String
                                 val username = profileDetailsData["Username"] as? String
 
@@ -136,37 +143,46 @@ class AccountActivity : AppCompatActivity(){
 
                                     // Fetch "ThePreferencesPlayer" sub-collection
                                     val preferencesRef = userRef.collection("ThePreferencesPlayer")
-                                    preferencesRef.get().addOnSuccessListener { preferencesSnapshot ->
-                                        for (preferencesDocument in preferencesSnapshot.documents) {
-                                            // Now you have access to each document in the "ThePreferencesPlayer" sub-collection
-                                            val preferencesData = preferencesDocument.data
+                                    preferencesRef.get()
+                                        .addOnSuccessListener { preferencesSnapshot ->
+                                            for (preferencesDocument in preferencesSnapshot.documents) {
+                                                // Now you have access to each document in the "ThePreferencesPlayer" sub-collection
+                                                val preferencesData = preferencesDocument.data
 
-                                            // Extract fields from the "ThePreferencesPlayer" document
-                                            val typeMatch = preferencesData?.get("preferredTypeMatch") as? String
-                                            val handPlay = preferencesData?.get("preferredHandPlay") as? String
-                                            val timeToPlay = preferencesData?.get("preferredTimeToPlay") as? String
-                                            val courtPosition = preferencesData?.get("preferredCourtPosition") as? String
-                                            val genderToPlayAgainst =
-                                                preferencesData?.get("preferredGenderToPlayAgainst") as? String
-                                            val playLocation = preferencesData?.get("preferredPlayLocation") as? String
+                                                // Extract fields from the "ThePreferencesPlayer" document
+                                                val typeMatch =
+                                                    preferencesData?.get("preferredTypeMatch") as? String
+                                                val handPlay =
+                                                    preferencesData?.get("preferredHandPlay") as? String
+                                                val timeToPlay =
+                                                    preferencesData?.get("preferredTimeToPlay") as? String
+                                                val courtPosition =
+                                                    preferencesData?.get("preferredCourtPosition") as? String
+                                                val genderToPlayAgainst =
+                                                    preferencesData?.get("preferredGenderToPlayAgainst") as? String
+                                                val playLocation =
+                                                    preferencesData?.get("preferredPlayLocation") as? String
 
-                                            // Check if any of the required preference fields is null before updating UI
-                                            if (typeMatch != null && handPlay != null && timeToPlay != null
-                                                && courtPosition != null && genderToPlayAgainst != null && playLocation != null
-                                            ) {
-                                                // Update UI with fetched preferences
-                                                locationText.text = playLocation
-                                                typeMatchText.text = "Type Match: $typeMatch"
-                                                handPlayText.text = "Preferred Hand: $handPlay"
-                                                timeToPlayText.text = "Preferred Time: $timeToPlay"
-                                                courtPositionText.text =
-                                                    "Preferred Court Position: $courtPosition"
-                                                genderToPlayAgainstText.text =
-                                                    "Preferred Gender to play against: $genderToPlayAgainst"
-                                            } else {
-                                                // Handle the case where some preference fields are null
-                                                // Show an error message or take appropriate action
-                                            }}}
+                                                // Check if any of the required preference fields is null before updating UI
+                                                if (typeMatch != null && handPlay != null && timeToPlay != null
+                                                    && courtPosition != null && genderToPlayAgainst != null && playLocation != null
+                                                ) {
+                                                    // Update UI with fetched preferences
+                                                    locationText.text = playLocation
+                                                    typeMatchText.text = "Type Match: $typeMatch"
+                                                    handPlayText.text = "Preferred Hand: $handPlay"
+                                                    timeToPlayText.text =
+                                                        "Preferred Time: $timeToPlay"
+                                                    courtPositionText.text =
+                                                        "Preferred Court Position: $courtPosition"
+                                                    genderToPlayAgainstText.text =
+                                                        "Preferred Gender to play against: $genderToPlayAgainst"
+                                                } else {
+                                                    // Handle the case where some preference fields are null
+                                                    // Show an error message or take appropriate action
+                                                }
+                                            }
+                                        }
 
                                 } else {
                                     // Handle the case where some fields in "Nickname" document are null
@@ -184,16 +200,17 @@ class AccountActivity : AppCompatActivity(){
             }
         }
 
-        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data: Intent? = result.data
-                if (data != null && data.data != null) {
-                    val imageUri: Uri = data.data!!
-                    sanitizedUsername?.let { uploadImageToFirebaseStorage(imageUri, it) }
+        pickImageLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data: Intent? = result.data
+                    if (data != null && data.data != null) {
+                        val imageUri: Uri = data.data!!
+                        sanitizedUsername?.let { uploadImageToFirebaseStorage(imageUri, it) }
 
+                    }
                 }
             }
-        }
 
         profileImage.setOnClickListener {
             // Open the image picker or camera to choose a new avatar
@@ -257,7 +274,8 @@ class AccountActivity : AppCompatActivity(){
         val userId = auth.currentUser?.uid
         if (userId != null) {
             val userRef = db.collection("ThePlayers").document(userId)
-            val profileDetailsRef = userRef.collection("TheProfileDetails").document(sanitizedUsername)
+            val profileDetailsRef =
+                userRef.collection("TheProfileDetails").document(sanitizedUsername)
 
             // Update the "Avatar" field with the new URL
             profileDetailsRef.update("Avatar", avatarUrl)

@@ -4,6 +4,5 @@ data class ClubEstablishment(
     val clubName: String,
     val clubEstablishmentName: String,
     val clubEstablishmentAddress: String,
-    // Add other properties as needed
 )
 

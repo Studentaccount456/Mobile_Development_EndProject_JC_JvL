@@ -11,45 +11,45 @@
         android:id="@+id/registerScreenText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register Screen"
-        android:textSize="20sp"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="50dp"
+        android:text="Register Screen"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/emailRegisterEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="20dp" />
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/passwordRegisterEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_marginTop="16dp" />
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:hint="Username" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:text="Submit" />
 
     <Button
         android:id="@+id/returnButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Return"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:text="Return" />
 </LinearLayout>

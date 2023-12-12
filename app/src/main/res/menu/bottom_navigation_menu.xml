@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
-        android:title="Home"
-        android:icon="@drawable/ic_home" />
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
 
     <item
         android:id="@+id/navigation_establishment"
@@ -12,11 +12,11 @@
 
     <item
         android:id="@+id/navigation_match"
-        android:title="Match"
-        android:icon="@drawable/ic_match" />
+        android:icon="@drawable/ic_match"
+        android:title="Match" />
 
     <item
         android:id="@+id/navigation_account"
-        android:title="Account"
-        android:icon="@drawable/ic_account" />
+        android:icon="@drawable/ic_account"
+        android:title="Account" />
 </menu>

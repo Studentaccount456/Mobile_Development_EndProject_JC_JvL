@@ -36,7 +36,8 @@ class MatchAdapter(private val matches: List<Match>) :
         val match = matches[position]
 
         holder.addressTextView.text = match.clubEstablishmentAddress
-        holder.dateTimeTextView.text = "Date: ${match.dateReservation}        TimeSlot: ${match.timeslot}"
+        holder.dateTimeTextView.text =
+            "Date: ${match.dateReservation}        TimeSlot: ${match.timeslot}"
 
         // Clear existing views in layouts
         holder.imagesLayout.removeAllViews()
@@ -120,7 +121,12 @@ class MatchAdapter(private val matches: List<Match>) :
                 emptyUsernameTextView.layoutParams = layoutParams
 
                 val usernamePaddingPx = 16
-                emptyUsernameTextView.setPadding(usernamePaddingPx * 4, 0, usernamePaddingPx, usernamePaddingPx)
+                emptyUsernameTextView.setPadding(
+                    usernamePaddingPx * 4,
+                    0,
+                    usernamePaddingPx,
+                    usernamePaddingPx
+                )
 
                 usernameLinearLayout.addView(emptyUsernameTextView)
             } else {
@@ -130,7 +136,12 @@ class MatchAdapter(private val matches: List<Match>) :
                 usernameTextView.layoutParams = layoutParams
 
                 val usernamePaddingPx = 16
-                usernameTextView.setPadding(usernamePaddingPx * 4, 0, usernamePaddingPx, usernamePaddingPx)
+                usernameTextView.setPadding(
+                    usernamePaddingPx * 4,
+                    0,
+                    usernamePaddingPx,
+                    usernamePaddingPx
+                )
 
                 usernameLinearLayout.addView(usernameTextView)
             }
@@ -139,8 +150,6 @@ class MatchAdapter(private val matches: List<Match>) :
         holder.imagesLayout.addView(imageLinearLayout)
         holder.usernamesLayout.addView(usernameLinearLayout)
     }
-
-
 
 
     override fun getItemCount(): Int {

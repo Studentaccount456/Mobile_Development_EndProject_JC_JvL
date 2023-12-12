@@ -11,39 +11,39 @@
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:layout_marginBottom="8dp"/>
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_marginBottom="8dp"/>
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/forgotPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Forgot your password?"
         android:layout_marginBottom="16dp"
-        android:textColor="@color/colorPrimary"/>
+        android:text="Forgot your password?"
+        android:textColor="@color/colorPrimary" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
         android:layout_marginTop="16dp"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary"
+        android:text="Login" />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
         android:layout_marginTop="8dp"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary"
+        android:text="Register" />
 </LinearLayout>

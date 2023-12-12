@@ -40,6 +40,7 @@ class EstablishmentsActivity : AppCompatActivity() {
                         //launchActivity(ClubEstablishmentsActivity::class.java)
 
                     }
+
                     1 -> {
                         // Start YourCourtReservationsActivity
                         launchActivity(YourCourtReservationsActivity::class.java)
@@ -73,19 +74,23 @@ class EstablishmentsActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }
@@ -107,23 +112,37 @@ class EstablishmentsActivity : AppCompatActivity() {
                 for (document in documents) {
                     // Extract data and add to the list
                     val clubNameDocumentId = document.id
-                    val establishmentsCollectionPath = "$collectionPath/$clubNameDocumentId/TheClubEstablishments"
+                    val establishmentsCollectionPath =
+                        "$collectionPath/$clubNameDocumentId/TheClubEstablishments"
 
                     // Retrieve data from the sub-collection
                     db.collection(establishmentsCollectionPath)
                         .get()
                         .addOnSuccessListener { establishmentDocuments ->
                             for (establishmentDocument in establishmentDocuments) {
-                                val establishmentName = establishmentDocument.getString("ClubEstablishmentName") ?: ""
-                                val establishmentAddress = establishmentDocument.getString("ClubEstablishmentAddress") ?: ""
+                                val establishmentName =
+                                    establishmentDocument.getString("ClubEstablishmentName") ?: ""
+                                val establishmentAddress =
+                                    establishmentDocument.getString("ClubEstablishmentAddress")
+                                        ?: ""
 
-                                Log.d("Firestore", "Fetched document - ClubName: $clubNameDocumentId, EstablishmentName: $establishmentName, EstablishmentAddress: $establishmentAddress")
+                                Log.d(
+                                    "Firestore",
+                                    "Fetched document - ClubName: $clubNameDocumentId, EstablishmentName: $establishmentName, EstablishmentAddress: $establishmentAddress"
+                                )
 
-                                val clubEstablishment = ClubEstablishment(clubNameDocumentId, establishmentName, establishmentAddress)
+                                val clubEstablishment = ClubEstablishment(
+                                    clubNameDocumentId,
+                                    establishmentName,
+                                    establishmentAddress
+                                )
                                 clubEstablishments.add(clubEstablishment)
 
                                 // Add log statement to check which documents are being fetched
-                                Log.d("Firestore", "Fetched document - ClubName: $clubNameDocumentId, EstablishmentName: $establishmentName, EstablishmentAddress: $establishmentAddress")
+                                Log.d(
+                                    "Firestore",
+                                    "Fetched document - ClubName: $clubNameDocumentId, EstablishmentName: $establishmentName, EstablishmentAddress: $establishmentAddress"
+                                )
                             }
 
                             // Notify the adapter that the data set has changed

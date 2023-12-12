@@ -22,7 +22,7 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
     private var sanitizedEstablishmentName: String? = null
     private lateinit var sentThroughClubName: String
     private lateinit var sentThroughClubEstablishment: String
-    private lateinit var sentThroughEstablishmentAddress : String
+    private lateinit var sentThroughEstablishmentAddress: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,24 +39,29 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }
 
-        sentThroughEstablishmentAddress = intent.getStringExtra("ClubEstablishmentAddress").toString()
+        sentThroughEstablishmentAddress =
+            intent.getStringExtra("ClubEstablishmentAddress").toString()
 
         firestore = FirebaseFirestore.getInstance()
 
@@ -68,11 +73,13 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
         val courtAddress = intent.getStringExtra("ClubEstablishmentAddress")
         sentThroughClubEstablishment = intent.getStringExtra("EstablishmentName").toString()
         if (sentThroughClubEstablishment != null) {
-            sanitizedEstablishmentName = sentThroughClubEstablishment.replace("[\\s,\\\\/]".toRegex(), "")
+            sanitizedEstablishmentName =
+                sentThroughClubEstablishment.replace("[\\s,\\\\/]".toRegex(), "")
         }
 
         findViewById<TextView>(R.id.textViewCourtAddress).text = courtAddress
-        findViewById<TextView>(R.id.textViewClubEstablishmentName).text = sentThroughClubEstablishment
+        findViewById<TextView>(R.id.textViewClubEstablishmentName).text =
+            sentThroughClubEstablishment
 
         fetchClubData(sentThroughClubName)
     }
@@ -102,7 +109,11 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception: Exception ->
-                Log.e("EstablishmentDetailsActivity", "Exception occurred: ${exception.message}", exception)
+                Log.e(
+                    "EstablishmentDetailsActivity",
+                    "Exception occurred: ${exception.message}",
+                    exception
+                )
             }
     }
 
@@ -129,7 +140,8 @@ class EstablishmentDetailsActivity : AppCompatActivity() {
 
     // .xml relies on view!!!!
     fun onReturnClicked(view: View) {
-        val receivedCoordinates = intent.getParcelableExtra<Parcelable>("TheMapCoordinates") as? GeoPoint
+        val receivedCoordinates =
+            intent.getParcelableExtra<Parcelable>("TheMapCoordinates") as? GeoPoint
 
         if (receivedCoordinates != null) {
             val mapIntent = Intent(this, MapActivity::class.java)

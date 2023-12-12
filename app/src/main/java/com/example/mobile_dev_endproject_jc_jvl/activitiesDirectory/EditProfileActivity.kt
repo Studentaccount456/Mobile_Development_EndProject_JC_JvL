@@ -72,10 +72,30 @@ class EditProfileActivity : AppCompatActivity() {
                         playLocationEditText.setText(preferences.preferredPlayLocation)
                     }
                     //playLocationEditText.setText(preferences.preferredPlayLocation)
-                    typeMatchSpinner.setSelection(getIndex(typeMatchSpinner, preferences.preferredTypeMatch))
-                    timeToPlaySpinner.setSelection(getIndex(timeToPlaySpinner, preferences.preferredTimeToPlay))
-                    courtPositionSpinner.setSelection(getIndex(courtPositionSpinner, preferences.preferredCourtPosition))
-                    genderSpinner.setSelection(getIndex(genderSpinner, preferences.preferredGenderToPlayAgainst))
+                    typeMatchSpinner.setSelection(
+                        getIndex(
+                            typeMatchSpinner,
+                            preferences.preferredTypeMatch
+                        )
+                    )
+                    timeToPlaySpinner.setSelection(
+                        getIndex(
+                            timeToPlaySpinner,
+                            preferences.preferredTimeToPlay
+                        )
+                    )
+                    courtPositionSpinner.setSelection(
+                        getIndex(
+                            courtPositionSpinner,
+                            preferences.preferredCourtPosition
+                        )
+                    )
+                    genderSpinner.setSelection(
+                        getIndex(
+                            genderSpinner,
+                            preferences.preferredGenderToPlayAgainst
+                        )
+                    )
                 } else {
                     // Error handling
                 }

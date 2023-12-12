@@ -98,19 +98,23 @@ class YourCourtReservationsActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }

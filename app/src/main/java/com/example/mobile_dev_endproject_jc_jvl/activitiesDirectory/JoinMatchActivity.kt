@@ -69,7 +69,10 @@ class JoinMatchActivity : AppCompatActivity() {
                 if (userSnapshot.exists()) {
                     val username = userSnapshot.getString("username") ?: ""
                     val sanitizedUsername = sanitizeUsername(username)
-                    Log.d("JoinMatchActivity", "1) username $username, sanitizedUsername, $sanitizedUsername")
+                    Log.d(
+                        "JoinMatchActivity",
+                        "1) username $username, sanitizedUsername, $sanitizedUsername"
+                    )
 
 
                     // Fetch user profile details
@@ -81,7 +84,10 @@ class JoinMatchActivity : AppCompatActivity() {
                             Log.d("JoinMatchActivity", " 2) avatar $avatar")
 
                             matchRef.get().addOnSuccessListener { documentSnapshot ->
-                                Log.d("JoinMatchActivity", " 2.1) document ${documentSnapshot.data}")
+                                Log.d(
+                                    "JoinMatchActivity",
+                                    " 2.1) document ${documentSnapshot.data}"
+                                )
                                 if (documentSnapshot.exists()) {
                                     val participators =
                                         documentSnapshot["participators"] as Map<*, *>?

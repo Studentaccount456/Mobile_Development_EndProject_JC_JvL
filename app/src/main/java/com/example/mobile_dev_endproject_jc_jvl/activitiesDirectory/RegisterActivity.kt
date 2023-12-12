@@ -47,9 +47,11 @@ class RegisterActivity : AppCompatActivity() {
                     email.isEmpty() -> {
                         emailEditText.error = "Email cannot be empty"
                     }
+
                     password.isEmpty() -> {
                         passwordEditText.error = "Password cannot be empty"
                     }
+
                     username.isEmpty() -> {
                         usernameEditText.error = "Username cannot be empty"
                     }
@@ -117,7 +119,12 @@ class RegisterActivity : AppCompatActivity() {
                                             .addOnSuccessListener {
                                                 // Document creation successful
                                                 showSnackbar("Registration successful!")
-                                                startActivity(Intent(this, LoginActivity::class.java))
+                                                startActivity(
+                                                    Intent(
+                                                        this,
+                                                        LoginActivity::class.java
+                                                    )
+                                                )
                                                 finish()
                                             }
                                             .addOnFailureListener { e ->

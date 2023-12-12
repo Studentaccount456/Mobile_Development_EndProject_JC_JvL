@@ -39,6 +39,7 @@ class MatchActivity : AppCompatActivity() {
                         //launchActivity(ClubEstablishmentsActivity::class.java)
 
                     }
+
                     1 -> {
                         // Start YourCourtReservationsActivity
                         launchActivity(YourMatchesActivity::class.java)
@@ -69,19 +70,23 @@ class MatchActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }

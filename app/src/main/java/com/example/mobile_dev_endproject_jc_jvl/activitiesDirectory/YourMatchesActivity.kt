@@ -41,6 +41,7 @@ class YourMatchesActivity : AppCompatActivity() {
                         launchActivity(MatchActivity::class.java)
 
                     }
+
                     1 -> {
                         // Start YourCourtReservationsActivity
                         //launchActivity(YourCourtReservationsActivity::class.java)
@@ -71,19 +72,23 @@ class YourMatchesActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }
@@ -120,7 +125,8 @@ class YourMatchesActivity : AppCompatActivity() {
 
                     if (matchIds.isNotEmpty()) { // Check if matchIds list is not empty
                         val matchesCollection = firestore.collection("TheMatches")
-                        val matchesQuery = matchesCollection.whereIn(FieldPath.documentId(), matchIds)
+                        val matchesQuery =
+                            matchesCollection.whereIn(FieldPath.documentId(), matchIds)
 
                         matchesQuery.get()
                             .addOnSuccessListener { matchSnapshot ->

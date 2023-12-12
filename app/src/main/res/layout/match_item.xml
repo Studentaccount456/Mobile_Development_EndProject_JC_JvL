@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/match_item.xml -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!-- res/layout/match_item.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -11,14 +9,14 @@
         android:id="@+id/textViewClubEstablishmentAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Club Establishment Address"/>
+        android:text="Club Establishment Address" />
 
     <!-- Row 2 -->
     <TextView
         android:id="@+id/textViewDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date and Time"/>
+        android:text="Date and Time" />
 
     <!-- Row 3 (Images) -->
     <LinearLayout

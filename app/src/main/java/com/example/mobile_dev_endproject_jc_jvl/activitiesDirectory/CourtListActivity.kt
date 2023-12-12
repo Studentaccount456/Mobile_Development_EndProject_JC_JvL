@@ -21,7 +21,7 @@ class CourtListActivity : AppCompatActivity() {
     private lateinit var sanitizedClubEstablishment: String
     private lateinit var sentThroughClubName: String
     private lateinit var sentThroughClubEstablishment: String
-    private lateinit var sentThroughEstablishmentAddress : String
+    private lateinit var sentThroughEstablishmentAddress: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,31 +38,39 @@ class CourtListActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }
 
-        sentThroughEstablishmentAddress = intent.getStringExtra("sentThroughEstablishmentAddress").toString()
+        sentThroughEstablishmentAddress =
+            intent.getStringExtra("sentThroughEstablishmentAddress").toString()
 
         // Retrieve sanitized club and establishment names from the intent
         sanitizedClubName = intent.getStringExtra("SanitizedClubName") ?: ""
         sanitizedClubEstablishment = intent.getStringExtra("SanitizedClubEstablishment") ?: ""
         sentThroughClubName = intent.getStringExtra("sentThroughClubName") ?: ""
         sentThroughClubEstablishment = intent.getStringExtra("sentThroughClubEstablishment") ?: ""
-        Log.d("CourtListActivity", "1) Sent along?: $sanitizedClubName, $sanitizedClubEstablishment")
+        Log.d(
+            "CourtListActivity",
+            "1) Sent along?: $sanitizedClubName, $sanitizedClubEstablishment"
+        )
 
 
         recyclerView = findViewById(R.id.recyclerView)
@@ -87,7 +95,10 @@ class CourtListActivity : AppCompatActivity() {
             .document(sanitizedClubEstablishment)
             .collection("TheClubCourts")
 
-        Log.d("CourtListActivity", "1.2) Sent along?: $sanitizedClubName, $sanitizedClubEstablishment")
+        Log.d(
+            "CourtListActivity",
+            "1.2) Sent along?: $sanitizedClubName, $sanitizedClubEstablishment"
+        )
         courtsRef.get()
             .addOnSuccessListener { documents ->
                 Log.d("CourtListActivity", "2) Reaches here?: ${documents.documents}")
@@ -106,12 +117,13 @@ class CourtListActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun navigateToAccountActivity(sentThroughCourtName: String) {
         // Create an explicit intent to navigate to AccountActivity
         val sanitizedCourtName = sentThroughCourtName.replace("[\\s,\\\\/]".toRegex(), "")
-        Log.d("CourtListActivity", "The right stuff sent? $sentThroughCourtName, $sanitizedCourtName")
+        Log.d(
+            "CourtListActivity",
+            "The right stuff sent? $sentThroughCourtName, $sanitizedCourtName"
+        )
         val intent = Intent(this, ReservationActivity::class.java).apply {
             putExtra("SanitizedClubName", sanitizedClubName)
             putExtra("SanitizedClubEstablishment", sanitizedClubEstablishment)

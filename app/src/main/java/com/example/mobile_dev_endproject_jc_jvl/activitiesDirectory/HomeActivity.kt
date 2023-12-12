@@ -22,8 +22,18 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationView.menu.findItem(R.id.navigation_home).isChecked = true
 
         // Add custom navigation items
-        addNavigationItem(container, "Book A court", "Navigates to book a court", AccountActivity::class.java)
-        addNavigationItem(container, "Show Club Map", "Shows all available clubs on a Map", MapActivity::class.java)
+        addNavigationItem(
+            container,
+            "Book A court",
+            "Navigates to book a court",
+            EstablishmentsActivity::class.java
+        )
+        addNavigationItem(
+            container,
+            "Show Club Map",
+            "Shows all available clubs on a Map",
+            MapActivity::class.java
+        )
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -31,19 +41,23 @@ class HomeActivity : AppCompatActivity() {
                     launchActivity(HomeActivity::class.java)
                     true
                 }
+
                 R.id.navigation_establishment -> {
                     launchActivity(EstablishmentsActivity::class.java)
                     true
                 }
+
                 R.id.navigation_match -> {
                     launchActivity(MatchActivity::class.java)
                     true
                 }
+
                 R.id.navigation_account -> {
                     item.isChecked = true
                     launchActivity(AccountActivity::class.java)
                     true
                 }
+
                 else -> false
             }
         }
@@ -51,8 +65,14 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    private fun addNavigationItem(container: LinearLayout, title: String, description: String, targetActivity: Class<*>) {
-        val customNavItem = layoutInflater.inflate(R.layout.custom_navigation_item, null) as ConstraintLayout
+    private fun addNavigationItem(
+        container: LinearLayout,
+        title: String,
+        description: String,
+        targetActivity: Class<*>
+    ) {
+        val customNavItem =
+            layoutInflater.inflate(R.layout.custom_navigation_item, null) as ConstraintLayout
         val titleTextView = customNavItem.findViewById<TextView>(R.id.titleTextView)
         val descriptionTextView = customNavItem.findViewById<TextView>(R.id.descriptionTextView)
 
