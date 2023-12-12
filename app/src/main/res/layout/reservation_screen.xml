@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
             android:id="@+id/establishmentTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             android:id="@+id/courtNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
+            android:padding="10dp"
             tools:context=".activitiesDirectory.TesterActivity_Date">
 
             <!-- Compact DatePicker -->
@@ -126,16 +126,32 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
+        <Spinner
+            android:id="@+id/typeOfMatchSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:entries="@array/type_of_match_options" />
+
+        <Spinner
+            android:id="@+id/gendersAllowedSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:entries="@array/gender_options" />
+
         <Button
             android:id="@+id/orderFieldButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Order Field" />
 
         <Button
             android:id="@+id/returnButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
             android:text="Return" />
     </LinearLayout>
 

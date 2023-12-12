@@ -22,6 +22,7 @@ class MatchAdapter(private val matches: List<Match>) :
     class MatchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val addressTextView: TextView = itemView.findViewById(R.id.textViewClubEstablishmentAddress)
         val dateTimeTextView: TextView = itemView.findViewById(R.id.textViewDateTime)
+        val typeOfMatchAndGender: TextView = itemView.findViewById(R.id.typeOfMatchAndGender)
         val imagesLayout: LinearLayout = itemView.findViewById(R.id.linearImages)
         val usernamesLayout: LinearLayout = itemView.findViewById(R.id.linearUsernames)
     }
@@ -38,7 +39,8 @@ class MatchAdapter(private val matches: List<Match>) :
         holder.addressTextView.text = match.clubEstablishmentAddress
         holder.dateTimeTextView.text =
             "Date: ${match.dateReservation}        TimeSlot: ${match.timeslot}"
-
+        holder.typeOfMatchAndGender.text =
+            "Type Match: ${match.typeOfMatch}        Gender: ${match.gendersAllowed}"
         // Clear existing views in layouts
         holder.imagesLayout.removeAllViews()
         holder.usernamesLayout.removeAllViews()
@@ -100,6 +102,8 @@ class MatchAdapter(private val matches: List<Match>) :
                     intent.putExtra("timeslot", match.timeslot)
                     intent.putExtra("PositionSquare", i.toString())
                     intent.putExtra("matchId", match.matchId)
+                    intent.putExtra("typeOfMatch", match.typeOfMatch)
+                    intent.putExtra("gendersAllowed", match.gendersAllowed)
                     // Pass any necessary data to JoinMatchActivity using intent.putExtra if needed
                     holder.itemView.context.startActivity(intent)
                 } else {

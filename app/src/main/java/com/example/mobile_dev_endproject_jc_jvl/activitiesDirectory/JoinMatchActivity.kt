@@ -17,6 +17,8 @@ class JoinMatchActivity : AppCompatActivity() {
     private lateinit var dateReservationTextView: TextView
     private lateinit var timeslotTextView: TextView
     private lateinit var positionSquareTextView: TextView
+    private lateinit var typeOfMatchTextview: TextView
+    private lateinit var gendersAllowedTextview: TextView
     private lateinit var joinMatchButton: Button
 
     private lateinit var matchId: String
@@ -33,6 +35,8 @@ class JoinMatchActivity : AppCompatActivity() {
         dateReservationTextView = findViewById(R.id.dateReservationTextView)
         timeslotTextView = findViewById(R.id.timeslotTextView)
         positionSquareTextView = findViewById(R.id.positionSquareTextView)
+        typeOfMatchTextview = findViewById(R.id.typeOfMatchTextview)
+        gendersAllowedTextview = findViewById(R.id.gendersAllowedTextview)
         joinMatchButton = findViewById(R.id.joinMatchButton)
 
         val intent = intent
@@ -44,6 +48,9 @@ class JoinMatchActivity : AppCompatActivity() {
         dateReservationTextView.text = "Date Match: ${intent.getStringExtra("dateReservation")}"
         timeslotTextView.text = "Time Match: ${intent.getStringExtra("timeslot")}"
         positionSquareTextView.text = "Place you join: $positionSquare"
+        typeOfMatchTextview.text = "Type of match: ${intent.getStringExtra("typeOfMatch")}"
+        gendersAllowedTextview.text =
+            "Genders allowed in match: ${intent.getStringExtra("gendersAllowed")}"
 
         joinMatchButton.setOnClickListener {
             joinMatch()

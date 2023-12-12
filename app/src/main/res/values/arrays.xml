@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="type_match_options">
-        <item>Friendly</item>
+        <item>Casual</item>
         <item>Competitive</item>
         <item>Either</item>
     </array>
@@ -28,5 +28,15 @@
         <item>Male</item>
         <item>Female</item>
         <item>Either</item>
+    </array>
+
+    <array name="type_of_match_options">
+        <item>Casual</item>
+        <item>Competitive</item>
+    </array>
+
+    <array name="gender_options_register">
+        <item>Male</item>
+        <item>Female</item>
     </array>
 </resources>

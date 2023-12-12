@@ -8,5 +8,7 @@ data class MatchReservation(
     val clubEstablishmentAddress: String = "",
     val timeslot: String = "",
     val dateReservation: String = "",
+    val typeOfMatch: String = "",
+    val gendersAllowed: String = "",
     val participators: Map<String, Any> = emptyMap()
 )

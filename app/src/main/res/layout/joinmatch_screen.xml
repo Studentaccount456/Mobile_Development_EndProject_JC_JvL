@@ -25,6 +25,20 @@
         android:padding="16dp"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/typeOfMatchTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/gendersAllowedTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="14sp" />
+
     <Button
         android:id="@+id/joinMatchButton"
         android:layout_width="150dp"

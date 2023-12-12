@@ -24,6 +24,7 @@ class AccountActivity : AppCompatActivity() {
     private lateinit var profileImage: ImageView
     private lateinit var usernameText: TextView
     private lateinit var locationText: TextView
+    private lateinit var genderText: TextView
     private lateinit var followersText: TextView
     private lateinit var followingText: TextView
     private lateinit var levelText: TextView
@@ -81,6 +82,7 @@ class AccountActivity : AppCompatActivity() {
         profileImage = findViewById(R.id.profileImage)
         usernameText = findViewById(R.id.usernameText)
         locationText = findViewById(R.id.locationText)
+        genderText = findViewById(R.id.genderText)
         followersText = findViewById(R.id.followersText)
         followingText = findViewById(R.id.followingText)
         levelText = findViewById(R.id.levelText)
@@ -127,6 +129,7 @@ class AccountActivity : AppCompatActivity() {
                                     profileDetailsData["Following"]?.toString()?.toInt()
                                 val avatarUrl = profileDetailsData["Avatar"] as? String
                                 val username = profileDetailsData["Username"] as? String
+                                val gender = profileDetailsData["Gender"] as? String
 
                                 // Sanitize username
                                 sanitizedUsername = username?.replace("[\\s,\\\\/]".toRegex(), "")
@@ -139,6 +142,7 @@ class AccountActivity : AppCompatActivity() {
                                     followersText.text = "Followers: $followersInformation"
                                     followingText.text = "Following: $followingInformation"
                                     levelText.text = "Level: $levelInformation"
+                                    genderText.text = "$gender"
 
 
                                     // Fetch "ThePreferencesPlayer" sub-collection

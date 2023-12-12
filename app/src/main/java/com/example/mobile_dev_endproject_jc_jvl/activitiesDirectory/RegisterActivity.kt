@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobile_dev_endproject_jc_jvl.R
 import com.google.android.material.snackbar.Snackbar
@@ -17,6 +18,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var usernameEditText: EditText
+    private lateinit var genderOfPlayerSpinner: Spinner
     private lateinit var submitButton: Button
     private lateinit var returnButton: Button
 
@@ -31,6 +33,7 @@ class RegisterActivity : AppCompatActivity() {
         emailEditText = findViewById(R.id.emailRegisterEditText)
         passwordEditText = findViewById(R.id.passwordRegisterEditText)
         usernameEditText = findViewById(R.id.usernameEditText)
+        genderOfPlayerSpinner = findViewById(R.id.chooseGenderSpinner)
         submitButton = findViewById(R.id.submitButton)
         returnButton = findViewById(R.id.returnButton)
 
@@ -38,9 +41,10 @@ class RegisterActivity : AppCompatActivity() {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
             val username = usernameEditText.text.toString().trim()
+            val gender = genderOfPlayerSpinner.selectedItem.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty()) {
-                registerUser(email, password)
+                registerUser(email, password, gender)
             } else {
                 // Check which fields are empty and display corresponding error messages
                 when {
@@ -65,7 +69,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerUser(email: String, password: String) {
+    private fun registerUser(email: String, password: String, gender: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -77,7 +81,8 @@ class RegisterActivity : AppCompatActivity() {
                         val player = hashMapOf(
                             "userId" to userId,
                             "email" to email,
-                            "username" to usernameEditText.text.toString().trim()
+                            "username" to usernameEditText.text.toString().trim(),
+                            "gender" to gender
                         )
 
                         val db = Firebase.firestore
@@ -93,7 +98,8 @@ class RegisterActivity : AppCompatActivity() {
                                     "Followers" to 0,
                                     "Following" to 0,
                                     "Level" to 1,
-                                    "Username" to usernameEditText.text.toString().trim()
+                                    "Username" to usernameEditText.text.toString().trim(),
+                                    "Gender" to gender
                                 )
 
                                 db.collection("ThePlayers")

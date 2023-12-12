@@ -39,6 +39,13 @@
         android:layout_marginTop="16dp"
         android:hint="Username" />
 
+    <Spinner
+        android:id="@+id/chooseGenderSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:entries="@array/gender_options_register" />
+
     <Button
         android:id="@+id/submitButton"
         android:layout_width="match_parent"

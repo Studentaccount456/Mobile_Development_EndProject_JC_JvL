@@ -18,6 +18,12 @@
         android:layout_height="wrap_content"
         android:text="Date and Time" />
 
+    <TextView
+        android:id="@+id/typeOfMatchAndGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date and Time" />
+
     <!-- Row 3 (Images) -->
     <LinearLayout
         android:id="@+id/linearImages"

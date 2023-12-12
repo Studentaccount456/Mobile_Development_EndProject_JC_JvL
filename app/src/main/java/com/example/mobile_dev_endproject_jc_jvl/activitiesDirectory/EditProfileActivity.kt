@@ -78,6 +78,12 @@ class EditProfileActivity : AppCompatActivity() {
                             preferences.preferredTypeMatch
                         )
                     )
+                    handPlaySpinner.setSelection(
+                        getIndex(
+                            handPlaySpinner,
+                            preferences.preferredHandPlay
+                        )
+                    )
                     timeToPlaySpinner.setSelection(
                         getIndex(
                             timeToPlaySpinner,

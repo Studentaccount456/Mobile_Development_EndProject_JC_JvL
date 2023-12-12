@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +51,9 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var sentThroughEstablishmentAddress: String
     private lateinit var usernameOfUserOne: String
     private lateinit var avatarOfUserOne: String
+    private lateinit var typeOfMatchSpinner: Spinner
+    private lateinit var gendersAllowedSpinner: Spinner
+    private lateinit var genderOfPlayer : String
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -128,11 +133,55 @@ class ReservationActivity : AppCompatActivity() {
 
         createMatchCheckBox = findViewById(R.id.createMatchCheckBox)
 
+        typeOfMatchSpinner = findViewById(R.id.typeOfMatchSpinner)
+        gendersAllowedSpinner = findViewById(R.id.gendersAllowedSpinner)
+
+        typeOfMatchSpinner.alpha = 0.5f
+        gendersAllowedSpinner.alpha = 0.5f
+        typeOfMatchSpinner.isEnabled = false
+        gendersAllowedSpinner.isEnabled = false
+
         // Add an OnCheckedChangeListener to createMatchCheckBox
         createMatchCheckBox.setOnCheckedChangeListener { _, isChecked ->
             // Set the boolean variable makeMatchCollections based on checkbox state
             makeMatchCollections = isChecked
             Log.d("ReservationActivity", "Checkbox: $makeMatchCollections")
+
+            // Adjust transparency and usability of spinners based on checkbox state
+            val alphaValue = if (isChecked) 1.0f else 0.5f
+
+            typeOfMatchSpinner.alpha = alphaValue
+            typeOfMatchSpinner.isEnabled = isChecked
+
+            gendersAllowedSpinner.alpha = alphaValue
+            gendersAllowedSpinner.isEnabled = isChecked
+
+            // Declare genderOptions outside the loop
+            var genderOptions: Array<String>
+
+            // Fetch the gender of the player
+            fetchGenderFirestore { playerGender ->
+                // Update spinner options based on player's gender and checkbox state
+                genderOptions = if (isChecked) {
+                    when (playerGender) {
+                        "Male" -> arrayOf("Male", "Either") // First option for Male
+                        else -> arrayOf(
+                            "Female",
+                            "Either"
+                        ) // Default to second option for other cases
+                    }
+                } else {
+                    when (playerGender) {
+                        "Female" -> arrayOf("Female", "Either") // First option for Female
+                        else -> arrayOf("Male", "Either") // Default to first option for other cases
+                    }
+                }
+                val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genderOptions)
+                gendersAllowedSpinner.adapter = genderAdapter
+
+                // Set the default selection based on fetched gender
+                gendersAllowedSpinner.setSelection(getIndex(gendersAllowedSpinner, playerGender))
+            }
         }
 
         // Retrieve data from the intent and set the text views accordingly
@@ -364,6 +413,8 @@ class ReservationActivity : AppCompatActivity() {
                 }
 
             if (makeMatchCollections) {
+                val preferredTypeMatch = typeOfMatchSpinner.selectedItem.toString()
+                val gendersAllowed = gendersAllowedSpinner.selectedItem.toString()
                 // Replace these variables with actual values
                 val matchReservation = MatchReservation(
                     clubName = sentThroughClubName,
@@ -373,6 +424,8 @@ class ReservationActivity : AppCompatActivity() {
                     clubEstablishmentAddress = sentThroughEstablishmentAddress,
                     timeslot = timeslot,
                     dateReservation = dateReservation,
+                    typeOfMatch = preferredTypeMatch,
+                    gendersAllowed = gendersAllowed,
                     participators = hashMapOf(
                         "UserName_1" to usernameOfUserOne,
                         "UserAvatar_1" to avatarOfUserOne,
@@ -751,5 +804,54 @@ class ReservationActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    // Add this function to find the index of an item in the spinner's adapter
+    private fun getIndex(spinner: Spinner, value: String): Int {
+        val adapter = spinner.adapter
+        for (i in 0 until adapter.count) {
+            if (adapter.getItem(i).toString() == value) {
+                return i
+            }
+        }
+        return 0 // Default to the first item if not found
+    }
+
+    private fun fetchGenderFirestore(callback: (String) -> Unit) {
+
+        // Get the current user's ID from Firebase Authentication
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUserId = currentUser?.uid
+
+        val db = FirebaseFirestore.getInstance()
+
+        // Reference to the document in the sub-collection
+        val documentReference =
+            currentUserId?.let {
+                db.collection("ThePlayers")
+                    .document(it)
+            }
+
+        // Add data to Firestore
+        documentReference?.get()?.addOnSuccessListener { documentSnapshot ->
+            // Successfully fetched data
+            if (documentSnapshot.exists()) {
+                // Check if the document exists
+                genderOfPlayer = documentSnapshot.getString("gender").toString()
+                // Now 'gender' contains the value of the 'gender' field
+                // Handle the gender data as needed
+                callback(genderOfPlayer)
+            } else {
+                // Document does not exist
+                // Handle accordingly
+                callback("Unknown")
+            }
+        }?.addOnFailureListener { e ->
+            // Handle error
+            // e.g., Log.e("TAG", "Error getting document", e)
+            callback("Unknown")
+        }
+    }
 }
+
+
+
 

@@ -11,6 +11,7 @@ import com.example.mobile_dev_endproject_jc_jvl.adaptersDirectory.MatchAdapter
 import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.Match
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MatchActivity : AppCompatActivity() {
@@ -21,6 +22,13 @@ class MatchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.match_screen)
+
+        // Fetch current user's gender from Firestore
+        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserUid != null) {
+            fetchUserGender(currentUserUid)
+        }
+
 
         val tabLayout: TabLayout = findViewById(R.id.tabLayout_Establishments)
 
@@ -94,28 +102,7 @@ class MatchActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        fetchDataFromFirestore()
-    }
-
-    private fun fetchDataFromFirestore() {
-        firestore.collection("TheMatches")
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                val matches = mutableListOf<Match>()
-
-                for (document in querySnapshot.documents) {
-                    val match = document.toObject(Match::class.java)
-                    Log.d("MatchActivity", "$match")
-                    match?.let {
-                        matches.add(it)
-                    }
-                }
-
-                displayMatches(matches)
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Firestore", "Error fetching data: $exception")
-            }
+        //fetchDataFromFirestore()
     }
 
     private fun displayMatches(matches: List<Match>) {
@@ -126,5 +113,58 @@ class MatchActivity : AppCompatActivity() {
     private fun launchActivity(cls: Class<*>) {
         val intent = Intent(this, cls)
         startActivity(intent)
+    }
+
+    private fun fetchUserGender(userId: String) {
+        firestore.collection("ThePlayers")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val userGender = documentSnapshot.getString("gender")
+                if (userGender != null) {
+                    // Now that you have the user's gender, fetch and display matches
+                    fetchDataFromFirestore(userGender)
+                } else {
+                    Log.e("MatchActivity", "User gender not found")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("MatchActivity", "Error fetching user gender: $exception")
+            }
+    }
+
+    private fun fetchDataFromFirestore(userGender: String) {
+        firestore.collection("TheMatches")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val matches = mutableListOf<Match>()
+
+                for (document in querySnapshot.documents) {
+                    val match = document.toObject(Match::class.java)
+                    Log.d("MatchActivity", "$match")
+                    match?.let {
+                        // Check if the match should be displayed based on user's gender and gendersAllowed
+                        if (shouldDisplayMatch(it, userGender)) {
+                            matches.add(it)
+                        }
+                    }
+                }
+
+                displayMatches(matches)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error fetching data: $exception")
+            }
+    }
+
+    private fun shouldDisplayMatch(match: Match, userGender: String): Boolean {
+        val gendersAllowed = match.gendersAllowed
+
+        // Check if the match should be displayed based on user's gender and gendersAllowed
+        return when (userGender) {
+            "Male" -> gendersAllowed != "Female"
+            "Female" -> gendersAllowed != "Male"
+            else -> true // Handle other cases or use a default value as needed
+        }
     }
 }
