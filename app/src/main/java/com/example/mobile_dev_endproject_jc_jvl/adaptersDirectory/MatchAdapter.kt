@@ -80,8 +80,7 @@ class MatchAdapter(private val matches: List<Match>) :
 
             // Check if avatar is "Default"
             if (avatarValue != null && avatarValue == "Default") {
-                imageView.setImageResource(R.drawable.ic_home)
-                imageView.setBackgroundColor(R.color.purple_200)
+                imageView.setImageResource(R.drawable.ic_joinmatch)
             } else {
                 Glide.with(holder.itemView).load(avatarValue).into(imageView)
             }
@@ -117,7 +116,7 @@ class MatchAdapter(private val matches: List<Match>) :
             if (usernameValue != null && usernameValue == "Default") {
                 // Add an empty TextView for "Default" username
                 val emptyUsernameTextView = TextView(holder.itemView.context)
-                emptyUsernameTextView.text = ""
+                emptyUsernameTextView.text = "Available"
                 emptyUsernameTextView.layoutParams = layoutParams
 
                 val usernamePaddingPx = 16
