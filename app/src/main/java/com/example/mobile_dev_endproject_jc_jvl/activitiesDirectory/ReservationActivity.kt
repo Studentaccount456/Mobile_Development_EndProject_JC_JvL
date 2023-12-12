@@ -54,6 +54,8 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var typeOfMatchSpinner: Spinner
     private lateinit var gendersAllowedSpinner: Spinner
     private lateinit var genderOfPlayer: String
+    private var completedUpdates: Int = 0
+    private var expectedUpdates: Int = 0
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -275,7 +277,7 @@ class ReservationActivity : AppCompatActivity() {
 
             } else {
                 findViewById<View>(R.id.redBorder).visibility = View.GONE
-                orderField()
+                orderField { launchActivity(EstablishmentsActivity::class.java) }
             }
         }
 
@@ -286,7 +288,17 @@ class ReservationActivity : AppCompatActivity() {
         }
     }
 
-    private fun orderField() {
+    private fun orderField(callback: () -> Unit) {
+
+        // Counter to track the number of completed updates
+        completedUpdates = 0
+
+        // Variable to store the expected number of updates
+        expectedUpdates = if (!makeMatchCollections) {
+            2
+        } else {
+            3
+        }
 
         // Get the current user's ID from Firebase Authentication
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -374,6 +386,8 @@ class ReservationActivity : AppCompatActivity() {
                         courtDocument.update("CourtReservations", existingReservations)
                             .addOnSuccessListener {
                                 Log.d("ReservationActivity", "Yeey the update was successful")
+                                completedUpdates++
+                                checkAndUpdateCompletion(callback)
                             }
                             .addOnFailureListener { e ->
                                 Log.e("ReservationActivity", "Update failed", e)
@@ -406,6 +420,8 @@ class ReservationActivity : AppCompatActivity() {
             documentReference.set(playerReservation)
                 .addOnSuccessListener {
                     // Successfully added data
+                    completedUpdates++
+                    checkAndUpdateCompletion(callback)
                     // Handle success as needed
                 }
                 .addOnFailureListener { e ->
@@ -453,6 +469,8 @@ class ReservationActivity : AppCompatActivity() {
                 documentReference.set(matchReservation)
                     .addOnSuccessListener {
                         // Successfully added data
+                        completedUpdates++
+                        checkAndUpdateCompletion(callback)
                         // Handle success as needed
                     }
                     .addOnFailureListener { e ->
@@ -849,6 +867,17 @@ class ReservationActivity : AppCompatActivity() {
             // Handle error
             // e.g., Log.e("TAG", "Error getting document", e)
             callback("Unknown")
+        }
+    }
+
+    // Function to check and update the completion status
+    private fun checkAndUpdateCompletion(callback: () -> Unit) {
+        Log.d(
+            "ReservationActivity",
+            "CompletedUpdates: $completedUpdates | CompletedUpdates: $expectedUpdates"
+        )
+        if (completedUpdates == expectedUpdates) {
+            callback()
         }
     }
 }

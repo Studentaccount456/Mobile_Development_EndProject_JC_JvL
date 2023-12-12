@@ -22,6 +22,9 @@ class JoinMatchActivity : AppCompatActivity() {
     private lateinit var gendersAllowedTextview: TextView
     private lateinit var joinMatchButton: Button
 
+    private var completedUpdates: Int = 0
+    private var expectedUpdates: Int = 0
+
     private lateinit var matchId: String
     private lateinit var positionSquare: String
 
@@ -86,7 +89,7 @@ class JoinMatchActivity : AppCompatActivity() {
             "Genders allowed in match: ${intent.getStringExtra("gendersAllowed")}"
 
         joinMatchButton.setOnClickListener {
-            joinMatch()
+            joinMatch { launchActivity(MatchActivity::class.java) }
         }
 
         val returnButton: Button = findViewById(R.id.returnButton)
@@ -95,7 +98,15 @@ class JoinMatchActivity : AppCompatActivity() {
         }
     }
 
-    private fun joinMatch() {
+    private fun joinMatch(callback: () -> Unit) {
+
+
+        // Counter to track the number of completed updates
+        completedUpdates = 0
+
+        // Variable to store the expected number of updates
+        expectedUpdates = 2
+
         val auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid
 
@@ -170,6 +181,8 @@ class JoinMatchActivity : AppCompatActivity() {
                                                 "Joined the match!",
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                            completedUpdates++
+                                            checkAndUpdateCompletion(callback)
                                         } else {
                                             Toast.makeText(
                                                 this,
@@ -238,7 +251,8 @@ class JoinMatchActivity : AppCompatActivity() {
                                                             reservationsArray
                                                         )
                                                             .addOnSuccessListener {
-                                                                // Successfully updated Firestore
+                                                                completedUpdates++
+                                                                checkAndUpdateCompletion(callback)
                                                             }
                                                             .addOnFailureListener { e ->
                                                                 // Handle failure
@@ -268,6 +282,18 @@ class JoinMatchActivity : AppCompatActivity() {
         // Implement your logic to sanitize the username (remove spaces or special characters)
         // For example, you can replace spaces with underscores
         return username.replace("\\s+".toRegex(), "")
+    }
+
+
+    // Function to check and update the completion status
+    private fun checkAndUpdateCompletion(callback: () -> Unit) {
+        Log.d(
+            "ReservationActivity",
+            "CompletedUpdates: $completedUpdates | CompletedUpdates: $expectedUpdates"
+        )
+        if (completedUpdates == expectedUpdates) {
+            callback()
+        }
     }
 }
 
