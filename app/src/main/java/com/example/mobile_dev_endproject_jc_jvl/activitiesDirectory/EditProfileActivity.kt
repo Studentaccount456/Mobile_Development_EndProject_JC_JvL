@@ -6,6 +6,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobile_dev_endproject_jc_jvl.dataClassesDirectory.Preferences
 import com.example.mobile_dev_endproject_jc_jvl.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -26,7 +27,39 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.edit_profile)
+        setContentView(R.layout.edit_profile_screen)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // Right Icon active
+        bottomNavigationView.menu.findItem(R.id.navigation_account).isChecked = true
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    launchActivity(HomeActivity::class.java)
+                    true
+                }
+
+                R.id.navigation_establishment -> {
+                    launchActivity(EstablishmentsActivity::class.java)
+                    true
+                }
+
+                R.id.navigation_match -> {
+                    launchActivity(MatchActivity::class.java)
+                    true
+                }
+
+                R.id.navigation_account -> {
+                    item.isChecked = true
+                    launchActivity(AccountActivity::class.java)
+                    true
+                }
+
+                else -> false
+            }
+        }
 
         // Initialize UI components
         playLocationEditText = findViewById(R.id.playLocationEditText)
@@ -156,5 +189,10 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
         return 0 // Default to the first item if not found
+    }
+
+    private fun launchActivity(cls: Class<*>) {
+        val intent = Intent(this, cls)
+        startActivity(intent)
     }
 }
