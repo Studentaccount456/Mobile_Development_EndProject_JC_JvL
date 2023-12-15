@@ -105,7 +105,7 @@ class JoinMatchActivity : AppCompatActivity() {
         completedUpdates = 0
 
         // Variable to store the expected number of updates
-        expectedUpdates = 2
+        expectedUpdates = 3
 
         val auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid
@@ -133,6 +133,13 @@ class JoinMatchActivity : AppCompatActivity() {
                         if (profileSnapshot.exists()) {
                             val avatar = profileSnapshot.getString("Avatar") ?: ""
                             Log.d("JoinMatchActivity", " 2) avatar $avatar")
+
+                            // Update ThePlayerReservationsCourts subcollection
+                            val reservationsRef =
+                                userRef.collection("ThePlayerReservationsCourts").document(matchId)
+                            val reservationsData = hashMapOf(
+                                "matchId" to matchId
+                            )
 
                             matchRef.get().addOnSuccessListener { documentSnapshot ->
                                 Log.d(
@@ -183,6 +190,15 @@ class JoinMatchActivity : AppCompatActivity() {
                                             ).show()
                                             completedUpdates++
                                             checkAndUpdateCompletion(callback)
+                                            reservationsRef.set(reservationsData)
+                                                .addOnSuccessListener {
+                                                    Log.d("JoinMatchActivity", "Added matchId to ThePlayerReservationsCourts")
+                                                    completedUpdates++
+                                                    checkAndUpdateCompletion(callback)
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    // Handle failure
+                                                }
                                         } else {
                                             Toast.makeText(
                                                 this,
