@@ -29,6 +29,7 @@ class AccountActivity : AppCompatActivity() {
     private lateinit var followingText: TextView
     private lateinit var levelText: TextView
     private lateinit var editProfileButton: Button
+    private lateinit var changePasswordButton: Button
     private lateinit var preferencesTitle: TextView
     private lateinit var typeMatchText: TextView
     private lateinit var handPlayText: TextView
@@ -87,6 +88,7 @@ class AccountActivity : AppCompatActivity() {
         followingText = findViewById(R.id.followingText)
         levelText = findViewById(R.id.levelText)
         editProfileButton = findViewById(R.id.editProfileButton)
+        changePasswordButton = findViewById(R.id.changePasswordButton)
         preferencesTitle = findViewById(R.id.preferencesTitle)
         typeMatchText = findViewById(R.id.typeMatchText)
         handPlayText = findViewById(R.id.handPlayText)
@@ -229,6 +231,10 @@ class AccountActivity : AppCompatActivity() {
 
         editProfileButton.setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+
+        changePasswordButton.setOnClickListener {
+            startActivity(Intent(this, ChangePasswordActivity::class.java))
         }
 
         logoutButton.setOnClickListener {

@@ -153,6 +153,13 @@
             android:textStyle="bold" />
         <!-- Additional TextViews for each preference below -->
 
+        <Button
+            android:id="@+id/changePasswordButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Change Password" />
+
         <!-- Final row -->
         <Button
             android:id="@+id/logoutButton"
