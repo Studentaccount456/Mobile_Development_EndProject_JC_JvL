@@ -71,6 +71,7 @@ class YourCourtReservationsActivity : AppCompatActivity() {
             val courtReservations = mutableListOf<CourtReservation>()
 
             for (document in documents) {
+                val isEmpty = document.getString("clubEstablishmentName") ?: ""
                 val courtReservation = CourtReservation(
                     document.getString("clubEstablishmentName") ?: "",
                     document.getString("clubEstablishmentAddress") ?: "",
@@ -78,7 +79,9 @@ class YourCourtReservationsActivity : AppCompatActivity() {
                     document.getString("dateReservation") ?: "",
                     document.getString("timeslot") ?: ""
                 )
-                courtReservations.add(courtReservation)
+                if (isEmpty != "") {
+                    courtReservations.add(courtReservation)
+                }
             }
 
             courtReservationAdapter = CourtReservationAdapter(courtReservations)
